@@ -5,3 +5,4 @@
 - Pedro Santos Calábria
 - José Victor Tavares de Moura
 - Rodrigo Luiz da Silva
+- Victor Augusto Monteiro
