@@ -1,5 +1,6 @@
 # Aplicativo para dimensionar um transformador monofásico de 60Hz
-# Feito em parceria com:
+# Grupo:
+- Lucas Maciel Sousa
 - Lucas Henrique Santos Neto
 - Pedro Santos Calábria
 - José Victor Tavares de Moura
