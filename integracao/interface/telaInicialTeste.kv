@@ -1,0 +1,66 @@
+#<MyGridLayout@MDGridLayout>:
+#    cols: 2
+#    spacing: "20dp"
+#    padding: "10dp"
+
+<MyMDTextField@MDTextField>:
+    mode: "rectangle"
+    helper_text_mode: "on_focus"
+
+<MyMDBoxLayout@MDBoxLayout>:
+    orientation: 'horizontal'
+    spacing: "20dp"
+
+MDScreen:
+
+    MDTopAppBar:
+        title: "Menu"
+        pos_hint: {"top": 1}
+        left_action_items: [["menu", lambda x: app.callback()]]
+
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: "90dp"
+        adaptive_height: True
+        size_hint_x: .8
+        pos_hint: {"center_x": .5, "center_y": .5}
+
+        MyMDBoxLayout:
+
+            MyMDTextField:
+                id: primary_voltage
+                hint_text: "Tensão Primária"
+                helper_text: "Unidade: Volt (V)"
+
+            MyMDTextField:
+                id: secondary_voltage
+                hint_text: "Tensão Secundária"
+                helper_text: "Unidade: Volt (V)"
+
+        MyMDBoxLayout:
+
+            MyMDTextField:
+                id: secondary_power
+                hint_text: "Potência Secundária"
+                helper_text: "Unidade: volt-ampère (VA)"
+
+            MyMDTextField:
+                id: frequency
+                hint_text: "Frequência"
+                helper_text: "Unidade: hertz (Hz)"
+
+        MyMDBoxLayout:
+            size_hint_x: .5
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            MyMDTextField:
+                id: blade_thickness
+                hint_text: "Espessura Lâmina"
+                helper_text: "Unidade: milímetros (mm)"
+
+        MyMDBoxLayout:
+
+            MDFillRoundFlatIconButton:
+                text: "Dimensionar Transformador"
+                padding: "15dp"
+                icon: "lightning-bolt-circle"

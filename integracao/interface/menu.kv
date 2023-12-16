@@ -1,0 +1,16 @@
+MDScreen:
+    name: "menu"
+
+    MDList:
+
+        OneLineListItem:
+            text: "Modelagem do transformador"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "scr 1"
+
+        OneLineListItem:
+            text: "Corrente de Magnetização"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "scr 2"
