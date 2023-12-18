@@ -1,53 +1,67 @@
-<TelaInicial@Screen>:
-    name: "telaInicial"
+<FichaTecnica@Screen>:
+    name: "fichaTecnica"
 
     MDScreen:
         MDBoxLayout:
             orientation: "vertical"
-            spacing: "90dp"
+            spacing: "80dp"
             adaptive_height: True
             size_hint_x: .8
             pos_hint: {"center_x": .5, "center_y": .5}
 
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: primary_voltage
-                    hint_text: "Tensão Primária"
-                    helper_text: "Unidade: Volt (V)"
-
-                MyMDTextField:
-                    id: secondary_voltage
-                    hint_text: "Tensão Secundária"
-                    helper_text: "Unidade: Volt (V)"
+            MDLabel:
+                text: "Peso Transformador"
 
             MyMDBoxLayout:
                 MyMDTextField:
-                    id: secondary_power
-                    hint_text: "Potência Secundária"
-                    helper_text: "Unidade: volt-ampère (VA)"
+                    id: peso_ferro
+
+                    hint_text: "Peso Ferro [Kg]"
+                    readonly: True
+                    focus: False
 
                 MyMDTextField:
-                    id: frequency
-                    hint_text: "Frequência"
-                    helper_text: "Unidade: hertz (Hz)"
+                    id: peso_cobre
 
-            MyMDBoxLayout:
-                size_hint_x: .5
-                pos_hint: {"center_x": .5, "center_y": .5}
+                    hint_text: "Peso Cobre [Kg]"
+                    readonly: True
+                    focus: False
 
                 MyMDTextField:
-                    id: blade_thickness
-                    hint_text: "Espessura Lâmina"
-                    helper_text: "Unidade: milímetros (mm)"
+                    id: peso_total
+
+                    hint_text: "Peso Total [Kg]"
+                    readonly: True
+                    focus: False
+
+            MDLabel:
+                text: "Perdas Transformador"
 
             MyMDBoxLayout:
-                MDFillRoundFlatIconButton:
-                    id: dimensionar_button
+                MyMDTextField:
+                    id: perda_ferro
 
-                    text: "Dimensionar Transformador"
-                    padding: "15dp"
-                    icon: "lightning-bolt-circle"
+                    hint_text: "Perda Ferro [W]"
+                    readonly: True
+                    focus: False
 
+                MyMDTextField:
+                    id: perda_cobre
+
+                    hint_text: "Perda Cobre [W]"
+                    readonly: True
+                    focus: False
+
+            MDLabel:
+                text: "Rendimento"
+
+            MyMDBoxLayout:
+                MyMDTextField:
+                    id: rendimento
+
+                    hint_text: "Rendimento [%]"
+                    readonly: True
+                    focus: False
 
     MDNavigationLayout:
         MDScreenManager:
@@ -55,7 +69,7 @@
                 MDTopAppBar:
                     id: menu_top_app_bar
 
-                    title: "Tela Inicial"
+                    title: "Ficha Técnica"
                     pos_hint: {"top": 1}
                     left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 

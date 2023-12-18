@@ -1,5 +1,5 @@
-<TelaInicial@Screen>:
-    name: "telaInicial"
+<Dimensionamento@Screen>:
+    name: "dimensionamento"
 
     MDScreen:
         MDBoxLayout:
@@ -55,7 +55,7 @@
                 MDTopAppBar:
                     id: menu_top_app_bar
 
-                    title: "Tela Inicial"
+                    title: "Dimensionamento"
                     pos_hint: {"top": 1}
                     left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 
@@ -126,3 +126,4 @@
                     on_press:
                         nav_drawer.set_state("close")
                         app.root.current = "desenvolvedores"
+

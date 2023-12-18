@@ -38,6 +38,24 @@ LaminaInformacoes = {
     }
 }
 
+TransformadorInformacoes = {
+    "tipo": "-",
+    "lamina": "-",
+    "quantidade_laminas": "-",
+    "espiras_primario": "-",
+    "espiras_secundario": "-",
+    "cabo_AWG_primario": "-",
+    "cabo_AWG_secundario": "-",
+    "dimesao_a": "-",
+    "dimesao_b": "-",
+    "peso_ferro": "-",
+    "peso_cobre": "-",
+    "peso_total": "-",
+    "perdas_ferro": "-",
+    "perdas_cobre": "-",
+    "rendimento": "-",
+}
+
 
 class AWG(Enum):
     AWG_44 = 0.002
@@ -89,15 +107,3 @@ class AWG(Enum):
     AWG_000 = 85.3
     AWG_0000 = 107.2
     INVALIDO = math.inf
-
-
-TRANSFORMADOR = {
-    "1p1s": 0,
-    "2p1s-1p2s": 1,
-    "2p2s": 2
-}
-
-lamina = {
-    "padronizada": 0,
-    "comprida": 1
-}

@@ -82,7 +82,7 @@ def encontrar_valor_awg(bitola_cabo_primario):
         if awg.value >= bitola_cabo_primario:
             return awg.name, awg.value
 
-    return "Inválido"
+    return "Inválido", "Inválido"
 
 
 def encontrar_densidade_corrente(potencia_secundaria):
@@ -99,6 +99,13 @@ def calcular_densidade_corrente_media(corrente_primaria, corrente_secundaria, se
     densidade_corrente_secundaria = corrente_secundaria/secao_condutor_secundario
 
     return (densidade_corrente_primaria + densidade_corrente_secundaria)/2
+
+
+def verificar_valores(*valores):
+    for valor in valores:
+        if valor == "Inválido":
+            return False
+    return True
 
 
 def arredondar_para_meio(sm):

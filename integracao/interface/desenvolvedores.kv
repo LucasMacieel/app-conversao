@@ -1,5 +1,5 @@
-<TelaInicial@Screen>:
-    name: "telaInicial"
+<Desenvolvedores@Screen>:
+    name: "desenvolvedores"
 
     MDScreen:
         MDBoxLayout:
@@ -9,45 +9,32 @@
             size_hint_x: .8
             pos_hint: {"center_x": .5, "center_y": .5}
 
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: primary_voltage
-                    hint_text: "Tensão Primária"
-                    helper_text: "Unidade: Volt (V)"
+            MDList:
+                spacing: "25dp"
 
-                MyMDTextField:
-                    id: secondary_voltage
-                    hint_text: "Tensão Secundária"
-                    helper_text: "Unidade: Volt (V)"
+                MDLabel:
+                    text: "José Victor Tavares de Moura"
+                    halign: "center"
 
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: secondary_power
-                    hint_text: "Potência Secundária"
-                    helper_text: "Unidade: volt-ampère (VA)"
+                MDLabel:
+                    text: "Lucas Henrique Santos Neto"
+                    halign: "center"
 
-                MyMDTextField:
-                    id: frequency
-                    hint_text: "Frequência"
-                    helper_text: "Unidade: hertz (Hz)"
+                MDLabel:
+                    text: "Lucas Maciel Sousa"
+                    halign: "center"
 
-            MyMDBoxLayout:
-                size_hint_x: .5
-                pos_hint: {"center_x": .5, "center_y": .5}
+                MDLabel:
+                    text: "Pedro Santos Calábria "
+                    halign: "center"
 
-                MyMDTextField:
-                    id: blade_thickness
-                    hint_text: "Espessura Lâmina"
-                    helper_text: "Unidade: milímetros (mm)"
+                MDLabel:
+                    text: "Rodrigo Luiz da Silva"
+                    halign: "center"
 
-            MyMDBoxLayout:
-                MDFillRoundFlatIconButton:
-                    id: dimensionar_button
-
-                    text: "Dimensionar Transformador"
-                    padding: "15dp"
-                    icon: "lightning-bolt-circle"
-
+                MDLabel:
+                    text: "Victor Augusto Monteiro"
+                    halign: "center"
 
     MDNavigationLayout:
         MDScreenManager:
@@ -55,7 +42,7 @@
                 MDTopAppBar:
                     id: menu_top_app_bar
 
-                    title: "Tela Inicial"
+                    title: "Desenvolvedores"
                     pos_hint: {"top": 1}
                     left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 
