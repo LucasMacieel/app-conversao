@@ -4,8 +4,8 @@ import numpy as np
 from scipy.interpolate import interp1d
 
 
-from integracao.definicoes.definicoes import Transformador, Lamina, LaminaInformacoes, TransformadorInformacoes
-from integracao.modulos.suporte import encontrar_produto_mais_proximo, encontrar_densidade_corrente, \
+from lib.definicoes import Transformador, Lamina, LaminaInformacoes, TransformadorInformacoes
+from lib.suporte import encontrar_produto_mais_proximo, encontrar_densidade_corrente, \
     encontrar_valor_awg, calcular_secao_cobre, calcular_densidade_corrente_media, calcular_espiras, verificar_valores
 
 def dimensionar_transformador(tensao_primaria, tensao_secundaria, potencia_secundaria, frequencia, espessura_lamina):
@@ -68,8 +68,8 @@ def especifacacoes_transformador(a, b, fio1, fio2, lamina, n1, n2, p_cu, p_fe, q
     TransformadorInformacoes["espiras_secundario"] = n2
     TransformadorInformacoes["cabo_AWG_primario"] = fio1
     TransformadorInformacoes["cabo_AWG_secundario"] = fio2
-    TransformadorInformacoes["dimesao_a"] = a
-    TransformadorInformacoes["dimesao_b"] = b
+    TransformadorInformacoes["dimensao_a"] = a
+    TransformadorInformacoes["dimensao_b"] = b
     TransformadorInformacoes["peso_ferro"] = p_fe
     TransformadorInformacoes["peso_cobre"] = p_cu
     TransformadorInformacoes["peso_total"] = p_fe + p_cu

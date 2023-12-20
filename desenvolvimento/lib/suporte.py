@@ -1,6 +1,6 @@
 import math
 
-from integracao.definicoes.definicoes import AWG, PotenciaCorrente, Lamina
+from lib.definicoes import AWG, PotenciaCorrente, Lamina
 
 
 def encontrar_produto_mais_proximo(secao_geometrica, lamina):

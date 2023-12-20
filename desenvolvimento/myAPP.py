@@ -12,9 +12,11 @@ from kivy.core.window import Window
 import matplotlib.pyplot as plt
 import os
 
-from integracao.definicoes.definicoes import TransformadorInformacoes
-from integracao.modulos.functions import dimensionar_transformador, plot_corrente_mag 
+# from integracao.definicoes.definicoes import TransformadorInformacoes
+# from integracao.modulos.functions import dimensionar_transformador, plot_corrente_mag 
 
+from lib.definicoes import TransformadorInformacoes
+from lib.functions import dimensionar_transformador, plot_corrente_mag 
 
 def set_error_message(instance_textfield):
     try:
@@ -43,14 +45,16 @@ class MainApp(MDApp):
         self.tela_inicial = None
         self.ficha_tecnica = None
         self.corrente_magnetizacao = None
-        self.dimensionar_butao = None
+        # self.dimensionar_butao = None
         self.tela_inicial_text_fields = None
         self.ficha_tecnica_text_fields = None
         self.bx = None
         self.nav = None
         self.ficha_tecnica_info = ["peso_ferro", "peso_cobre", "peso_total", "perdas_ferro", "perdas_cobre",
                                    "rendimento"]
-        self.screen = Builder.load_file("main.kv")
+        self.dimensionamento_info = ["espiras_primario", "espiras_secundario", "cabo_AWG_primario", "cabo_AWG_secundario", "lamina",
+                                   "quantidade_laminas", "peso_total", "dimensao_a", "dimensao_b"]
+        self.screen = Builder.load_file("../integracao/interface/main.kv")
         Window.bind(on_keyboard=self.events)
         self.manager_open = False
         self.file_manager = MDFileManager(
@@ -80,8 +84,8 @@ class MainApp(MDApp):
         try:
 
             espiras_primaria = TransformadorInformacoes["espiras_primario"]
-            frequencia = self.tela_inicial.ids.frequency
-            tensao_primaria =  self.tela_inicial.ids.primary_voltage
+            frequencia = float(self.tela_inicial.ids.frequency.text)
+            tensao_primaria =  float(self.tela_inicial.ids.primary_voltage.text)
 
             #Valores utilizados para teste da funcionalidade
             #tensao_primaria = 230 * (2 ** 0.5)
@@ -112,7 +116,6 @@ class MainApp(MDApp):
 
             #toast("Verifique se os valores de frequência, número de espiras e tensão do primario foram setados")
 
-
     def exit_manager(self, *args):
         '''Called when the user reaches the root of the directory tree.'''
 
@@ -123,7 +126,6 @@ class MainApp(MDApp):
         self.exit_manager()
         self.plotar_grafico_cm(path)
 
-
     def events(self, instance, keyboard, keycode, text, modifiers):
         '''Called when buttons are pressed on the mobile device.'''
 
@@ -133,7 +135,7 @@ class MainApp(MDApp):
         return True
 
 
-    def executar_calculos(self, instance_button):
+    def executar_calculos(self):
         if self.verificar_campos():
             tensao_primaria = float(self.tela_inicial_text_fields[0].text)
             tensao_secundaria = float(self.tela_inicial_text_fields[1].text)
@@ -150,8 +152,17 @@ class MainApp(MDApp):
             else:
                 self.exibir_ficha_tecnica()
                 self.exibir_detalhamento()
+                self.exibir_dimensionamento()
         else:
             toast("Preencha todos os campos.")
+
+    def exibir_dimensionamento(self):
+        self.root.current = "dimensionamento"
+
+        for index, textfield in enumerate(self.dimensionamento_text_fields):
+            info = self.dimensionamento_info[index]
+            textfield.text = str(TransformadorInformacoes[info])
+
 
     def verificar_campos(self):
         # Verificar se todos os campos estão preenchidos
@@ -175,7 +186,6 @@ class MainApp(MDApp):
     def exibir_ficha_tecnica(self):
         for index, textfield in enumerate(self.ficha_tecnica_text_fields):
             info = self.ficha_tecnica_info[index]
-
             textfield.text = str(TransformadorInformacoes[info])
 
     def limpar_dados(self):
@@ -195,7 +205,8 @@ class MainApp(MDApp):
         self.tela_inicial = self.screen.get_screen("telaInicial")
         self.ficha_tecnica = self.screen.get_screen("fichaTecnica")
         self.corrente_magnetizacao = self.screen.get_screen("correnteMagnetizacao")
-        self.dimensionar_butao = self.tela_inicial.ids.dimensionar_button
+        self.dimensionamento = self.screen.get_screen("dimensionamento")
+        # self.dimensionar_butao = self.tela_inicial.ids.dimensionar_button
 
         self.tela_inicial_text_fields = [
             self.tela_inicial.ids.primary_voltage,
@@ -214,14 +225,26 @@ class MainApp(MDApp):
             self.ficha_tecnica.ids.rendimento
         ]
 
+        self.dimensionamento_text_fields = [
+            self.dimensionamento.ids.espiras_primario,
+            self.dimensionamento.ids.espiras_secundario,
+            self.dimensionamento.ids.cabo_AWG_primario,
+            self.dimensionamento.ids.cabo_AWG_secundario,
+            self.dimensionamento.ids.lamina,
+            self.dimensionamento.ids.quantidade_laminas,
+            self.dimensionamento.ids.peso_total,
+            self.dimensionamento.ids.dimensao_a,
+            self.dimensionamento.ids.dimensao_b
+        ]
+
         for textfield in self.tela_inicial_text_fields:
             textfield.bind(
                 on_text_validate=set_error_message
             )
 
-        self.dimensionar_butao.bind(
-            on_press=self.executar_calculos
-        )
+        # self.dimensionar_butao.bind(
+        #     on_press=self.executar_calculos
+        # )
 
         return self.screen
 

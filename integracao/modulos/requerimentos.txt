@@ -5,6 +5,6 @@ numpy
 kivy==2.2.0
 kivymd
 Kivy-garden==0.1.4
-interp1d
+spycy
 buidozer
 cython==0.29.19
