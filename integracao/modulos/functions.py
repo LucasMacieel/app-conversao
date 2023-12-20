@@ -1,9 +1,12 @@
 import math
+import pandas as pd
+import numpy as np
+from scipy.interpolate import interp1d
+
 
 from integracao.definicoes.definicoes import Transformador, Lamina, LaminaInformacoes, TransformadorInformacoes
 from integracao.modulos.suporte import encontrar_produto_mais_proximo, encontrar_densidade_corrente, \
     encontrar_valor_awg, calcular_secao_cobre, calcular_densidade_corrente_media, calcular_espiras, verificar_valores
-
 
 def dimensionar_transformador(tensao_primaria, tensao_secundaria, potencia_secundaria, frequencia, espessura_lamina):
     transformador = Transformador.P1_S1
@@ -212,3 +215,29 @@ def possibilidade_execucao(tipo_lamina, dimensao_a, espiras_primario, espiras_se
                                        secao_condutor_secundario)
 
     return secao_janela/sesao_cobre >= 3
+
+
+def plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, arquivo):
+    try:
+        # Tensão máxima [V]:
+        V = tensao_primaria * (2 ** 0.5)
+        # Velocidade angular [rad/s]:
+        w = 2 * np.pi * frequencia
+
+        coordinates = pd.read_excel(arquivo)
+        fmm = coordinates['MMF']
+        fluxo = coordinates['Fluxo']
+
+        t = np.arange(0, 0.034, 1/3000)
+        fluxo_por_tempo = -V * np.cos(w* t) / (w* espiras_primaria)
+
+        interp_function = interp1d(fluxo, fmm, kind='linear', fill_value="extrapolate")
+        mmf = interp_function(fluxo_por_tempo)
+
+        corrente = mmf/espiras_primaria
+
+        return (t, corrente)
+
+    except Exception as e:
+        print(f"Error: {e}")
+

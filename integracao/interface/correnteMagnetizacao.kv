@@ -1,52 +1,34 @@
 <CorrenteMagnetizacao@Screen>:
     name: "correnteMagnetizacao"
+    ScreenManager:
+        id: screen_manager
+        MDScreen:
+            name: "correnteMagnetizacao"
+            MDRoundFlatIconButton:
+                text: "Importar arquivo"
+                icon: "folder"
+                pos_hint: {"center_x": .5, "center_y": .2}
+                on_release: app.file_manager_open()
 
-    MDScreen:
-        MDBoxLayout:
-            orientation: "vertical"
-            spacing: "90dp"
-            adaptive_height: True
-            size_hint_x: .8
-            pos_hint: {"center_x": .5, "center_y": .5}
+            MDRaisedButton:
+                text: "Gerar gráfico"
+                name: "graph"
+                pos_hint: {"center_x":.5, "center_y":.11}
+                on_release: app.change_screen("graph")
+        
+        MDScreen:
+            name: "graph"
+            BoxLayout:
+                id:graph
+                orientation: 'vertical'
+                pos_hint: {"top":1}
+                size_hint_y:.8
 
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: primary_voltage
-                    hint_text: "Tensão Primária"
-                    helper_text: "Unidade: Volt (V)"
+            MDRaisedButton:
+                text: "Voltar"
+                pos_hint: {"center_y":.1, "center_x":.5}
+                on_release: app.change_screen("correnteMagnetizacao")
 
-                MyMDTextField:
-                    id: secondary_voltage
-                    hint_text: "Tensão Secundária"
-                    helper_text: "Unidade: Volt (V)"
-
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: secondary_power
-                    hint_text: "Potência Secundária"
-                    helper_text: "Unidade: volt-ampère (VA)"
-
-                MyMDTextField:
-                    id: frequency
-                    hint_text: "Frequência"
-                    helper_text: "Unidade: hertz (Hz)"
-
-            MyMDBoxLayout:
-                size_hint_x: .5
-                pos_hint: {"center_x": .5, "center_y": .5}
-
-                MyMDTextField:
-                    id: blade_thickness
-                    hint_text: "Espessura Lâmina"
-                    helper_text: "Unidade: milímetros (mm)"
-
-            MyMDBoxLayout:
-                MDFillRoundFlatIconButton:
-                    id: dimensionar_button
-
-                    text: "Dimensionar Transformador"
-                    padding: "15dp"
-                    icon: "lightning-bolt-circle"
 
 
     MDNavigationLayout:

@@ -1,0 +1,10 @@
+matplotlibmatplotlib
+openpyxl
+pandas
+numpy
+kivy==2.2.0
+kivymd
+Kivy-garden==0.1.4
+interp1d
+buidozer
+cython==0.29.19
