@@ -70,17 +70,37 @@
                         MDLabel:
                             text: "Dimensões do Transformador"
 
-                        MyMDBoxLayout:
+                        MDBoxLayout:
+                            orientation: 'horizontal'
 
-                            MyMDTextField:
-                                id: dimensao_a
-                                hint_text: "Dimensão a [cm]"
-                                readonly: True
+                            MDBoxLayout:
+#                                size: {"40dp", "50dp"}
+                                orientation: 'horizontal'
+                                spacing: "20dp"
 
-                            MyMDTextField:
-                                id: dimensao_b
-                                hint_text: "Dimensão b [cm]"
-                                readonly: True
+                                FitImage:
+                                    size_hint_y: None
+                                    size: {"50dp", "122dp"}
+                                    orientation: 'horizontal'
+                                    source: '../integracao/images/transformador.png'
+
+                                FitImage:
+                                    size_hint_y: None
+                                    size: {"85dp", "120dp"}
+                                    orientation: 'horizontal'
+                                    source: '../integracao/images/lamina_padronizada.png'
+
+                            MyMDBoxLayout:
+                                size_hint_y: .9
+                                MyMDTextField:
+                                    id: dimensao_a
+                                    hint_text: "Dimensão a [cm]"
+                                    readonly: True
+
+                                MyMDTextField:
+                                    id: dimensao_b
+                                    hint_text: "Dimensão b [cm]"
+                                    readonly: True
 
                         MyMDBoxLayout:
                             size_hint_x: .5

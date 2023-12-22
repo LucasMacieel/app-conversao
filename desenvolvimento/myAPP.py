@@ -10,6 +10,7 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.label import MDLabel
 from matplotlib import pyplot as plt
+from kivy.core.window import Window
 
 from integracao.definicoes.definicoes import TransformadorInformacoes
 from integracao.modulos.functions import dimensionar_transformador, plot_corrente_mag
@@ -60,6 +61,7 @@ class MainApp(MDApp):
                                      "cabo_AWG_secundario", "lamina", "quantidade_laminas", "peso_total",
                                      "dimensao_a", "dimensao_b"]
         self.screen = Builder.load_file("../integracao/interface/main.kv")
+        Window.bind(on_keyboard=self.events)
         self.manager_open = False
         self.file_manager = MDFileManager(
             exit_manager=self.exit_manager, select_path=self.plotar_grafico_mag
@@ -76,7 +78,27 @@ class MainApp(MDApp):
         self.file_manager.close()
 
     def clear_graph_widgets(self):
-        self.nav = None
+        if self.bx and self.nav:
+            self.bx.clear_widgets()
+            self.bx = None
+            self.nav = None
+
+    def events(self, instance, keyboard, keycode, text, modifiers):
+        """Called when buttons are pressed on the mobile device."""
+
+        if keyboard in (1001, 27):
+            if self.manager_open:
+                self.file_manager.back()
+        return True
+
+    def change_screen(self, screen_name, back_effect):
+        screen_manager = self.corrente_magnetizacao.ids.screen_manager
+        screen_manager.current = screen_name
+
+        if back_effect:
+            screen_manager.transition.direction = 'right'
+        else:
+            screen_manager.transition.direction = 'left'
 
     def plotar_grafico_mag(self, path: str):
         """Plotar o gráfico da corrente de magnetização."""
@@ -105,11 +127,34 @@ class MainApp(MDApp):
             self.bx.add_widget(canvas)
 
         except Exception as e:
-            mensagem_erro = f"\n{type(e).__name__}, {str(e)}"
+            mensagem_erro = ""
+            if type(e).__name__ == "ValueError":
+                mensagem_erro = "\nVerifique se todos os campos da Tela Inicial estão preenchidos."
+            elif type(e).__name__ == "TypeError":
+                mensagem_erro = "\nCertifique-se de que o arquivo importado segue a estrutura recomendada."
+
             content = MDLabel(text=mensagem_erro, halign='left', valign='top', markup=True, padding=(12, 10))
             pop_up = MDDialog(title="Erro", size_hint=(0.8, 0.4))
             pop_up.add_widget(content)
             pop_up.open()
+
+    def abrir_arquivo_de_exemplo(self):
+        # Substitua o caminho do arquivo de exemplo pelo caminho real do seu arquivo
+        caminho_arquivo_exemplo = '../integracao/arquivo/MagCurve-1.txt'
+
+        try:
+            with open(caminho_arquivo_exemplo, 'r') as arquivo:
+                conteudo = arquivo.read()
+
+                content = MDLabel(text=f"Arquivo Exemplo:\n\n{conteudo}", halign='center', valign='top')
+                pop_up = MDDialog(size_hint=(0.8, 0.8))
+                pop_up.add_widget(content)
+                pop_up.open()
+
+                print(f'Conteúdo do arquivo de exemplo:\n{conteudo}')
+                # Aqui você pode realizar outras ações com o conteúdo do arquivo, se necessário
+        except FileNotFoundError:
+            print(f'O arquivo de exemplo não foi encontrado em: {caminho_arquivo_exemplo}')
 
     def executar_calculos(self):
         if self.verificar_campos():
@@ -159,6 +204,7 @@ class MainApp(MDApp):
         self.tela_inicial = self.screen.get_screen("telaInicial")
         self.dimensionamento = self.screen.get_screen("dimensionamento")
         self.ficha_tecnica = self.screen.get_screen("fichaTecnica")
+        self.corrente_magnetizacao = self.screen.get_screen("correnteMagnetizacao")
 
         self.tela_inicial_text_fields = [
             self.tela_inicial.ids.primary_voltage,
