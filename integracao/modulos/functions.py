@@ -23,25 +23,29 @@ def dimensionar_transformador(tensao_primaria, tensao_secundaria, potencia_secun
 
     densidade_corrente_media = calcular_densidade_corrente_media(i1, i2, s1, s2)
 
-    a, b, n1, n2, sm = calcular_parametros_lamina(frequencia, lamina, potencia_secundaria, tensao_primaria,
-                                                  tensao_secundaria, transformador)
+    aux_result = calcular_parametros_lamina(frequencia, lamina, potencia_secundaria, tensao_primaria,
+                                            tensao_secundaria, transformador)
 
-    if not verificar_valores(a, b, n1, n2, sm):
+    if aux_result == "Inválido":
         return False
+
+    a, b, n1, n2, sm = aux_result
 
     if a < 0 or b < 0 or not possibilidade_execucao(lamina, a, n1, n2, s1, s2):
         lamina = Lamina.COMPRIDA
-        a, b, n1, n2, sm = calcular_parametros_lamina(frequencia, lamina, potencia_secundaria, tensao_primaria,
-                                                      tensao_secundaria, transformador)
+        aux_result = calcular_parametros_lamina(frequencia, lamina, potencia_secundaria, tensao_primaria,
+                                                tensao_secundaria, transformador)
 
-        if (not verificar_valores(a, b, n1, n2, sm)) or \
+        if (aux_result == "Inválido") or \
                 (a < 0 or b < 0 or not possibilidade_execucao(lamina, a, n1, n2, s1, s2)):
             return False
+
+        a, b, n1, n2, sm = aux_result
 
     quantidade_laminas = calcular_quantidade_laminas(b, espessura_lamina)
     p_fe = calcular_peso_ferro(lamina, a, b)
 
-    if not verificar_valores(a, b, n1, n2, sm):
+    if not verificar_valores(p_fe):
         return False
 
     s_cu = calcular_secao_cobre(n1, n2, s1, s2)
@@ -65,8 +69,8 @@ def especifacacoes_transformador(a, b, fio1, fio2, lamina, n1, n2, p_cu, p_fe, q
     TransformadorInformacoes["espiras_secundario"] = n2
     TransformadorInformacoes["cabo_AWG_primario"] = fio1
     TransformadorInformacoes["cabo_AWG_secundario"] = fio2
-    TransformadorInformacoes["dimesao_a"] = a
-    TransformadorInformacoes["dimesao_b"] = b
+    TransformadorInformacoes["dimensao_a"] = a
+    TransformadorInformacoes["dimensao_b"] = b
     TransformadorInformacoes["peso_ferro"] = p_fe
     TransformadorInformacoes["peso_cobre"] = p_cu
     TransformadorInformacoes["peso_total"] = p_fe + p_cu

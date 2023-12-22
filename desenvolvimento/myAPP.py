@@ -26,19 +26,31 @@ def set_error_message(instance_textfield):
             instance_textfield.error = False
 
 
+def exibir_informacoes(infos, fields):
+    for index, textfield in enumerate(fields):
+        info = infos[index]
+
+        textfield.text = str(TransformadorInformacoes[info])
+
+
 class MainApp(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tela_inicial = None
+        self.dimensionamento = None
         self.ficha_tecnica = None
         self.dimensionar_butao = None
         self.tela_inicial_text_fields = None
+        self.dimensionamento_text_fields = None
         self.ficha_tecnica_text_fields = None
         self.ficha_tecnica_info = ["peso_ferro", "peso_cobre", "peso_total", "perdas_ferro", "perdas_cobre",
                                    "rendimento"]
+        self.dimensionamento_info = ["espiras_primario", "espiras_secundario", "cabo_AWG_primario",
+                                     "cabo_AWG_secundario", "lamina", "quantidade_laminas", "peso_total",
+                                     "dimensao_a", "dimensao_b"]
         self.screen = Builder.load_file("../integracao/interface/main.kv")
 
-    def executar_calculos(self, instance_button):
+    def executar_calculos(self):
         if self.verificar_campos():
             tensao_primaria = float(self.tela_inicial_text_fields[0].text)
             tensao_secundaria = float(self.tela_inicial_text_fields[1].text)
@@ -53,8 +65,8 @@ class MainApp(MDApp):
                 self.limpar_dados()
                 toast("Os valores de entrada fornecidos não são adequados para dimensionar o transformador.")
             else:
-                self.exibir_ficha_tecnica()
-                self.exibir_detalhamento()
+                exibir_informacoes(self.dimensionamento_info, self.dimensionamento_text_fields)
+                exibir_informacoes(self.ficha_tecnica_info, self.ficha_tecnica_text_fields)
         else:
             toast("Preencha todos os campos.")
 
@@ -73,18 +85,9 @@ class MainApp(MDApp):
         # Ativar ou desativar o botão com base na condição
         return all(todos_preenchidos) and not any(erros)
 
-    def exibir_detalhamento(self):
-        # TODO: IMPLEMENTAR LOGICA PARA EXIBIR AS INFORMACOES DA TELA DE DETALHAMENTO
-        pass
-
-    def exibir_ficha_tecnica(self):
-        for index, textfield in enumerate(self.ficha_tecnica_text_fields):
-            info = self.ficha_tecnica_info[index]
-
-            textfield.text = str(TransformadorInformacoes[info])
-
     def limpar_dados(self):
-        # TODO: IMPLEMENTAR LOGICA PARA LIMPAR OS INFORMACOES DA TELA DE DETALHAMENTO
+        for textfield in self.dimensionamento_text_fields:
+            textfield.text = "-"
 
         for textfield in self.ficha_tecnica_text_fields:
             textfield.text = "-"
@@ -93,6 +96,7 @@ class MainApp(MDApp):
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Yellow"
         self.tela_inicial = self.screen.get_screen("telaInicial")
+        self.dimensionamento = self.screen.get_screen("dimensionamento")
         self.ficha_tecnica = self.screen.get_screen("fichaTecnica")
         self.dimensionar_butao = self.tela_inicial.ids.dimensionar_button
 
@@ -111,6 +115,18 @@ class MainApp(MDApp):
             self.ficha_tecnica.ids.perda_ferro,
             self.ficha_tecnica.ids.perda_cobre,
             self.ficha_tecnica.ids.rendimento
+        ]
+
+        self.dimensionamento_text_fields = [
+            self.dimensionamento.ids.espiras_primario,
+            self.dimensionamento.ids.espiras_secundario,
+            self.dimensionamento.ids.cabo_AWG_primario,
+            self.dimensionamento.ids.cabo_AWG_secundario,
+            self.dimensionamento.ids.lamina,
+            self.dimensionamento.ids.quantidade_laminas,
+            self.dimensionamento.ids.peso_total,
+            self.dimensionamento.ids.dimensao_a,
+            self.dimensionamento.ids.dimensao_b
         ]
 
         for textfield in self.tela_inicial_text_fields:

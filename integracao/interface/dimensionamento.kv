@@ -4,50 +4,92 @@
     MDScreen:
         MDBoxLayout:
             orientation: "vertical"
-            spacing: "90dp"
-            adaptive_height: True
-            size_hint_x: .8
-            pos_hint: {"center_x": .5, "center_y": .5}
 
             MyMDBoxLayout:
-                MyMDTextField:
-                    id: primary_voltage
-                    hint_text: "Tensão Primária"
-                    helper_text: "Unidade: Volt (V)"
 
-                MyMDTextField:
-                    id: secondary_voltage
-                    hint_text: "Tensão Secundária"
-                    helper_text: "Unidade: Volt (V)"
+                MDScrollView:
 
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: secondary_power
-                    hint_text: "Potência Secundária"
-                    helper_text: "Unidade: volt-ampère (VA)"
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        spacing: "90dp"
+                        padding: "10dp"
+                        adaptive_height: True
+                        size_hint_x: .8
+                        pos_hint: {"center_x": .5, "center_y": .5}
 
-                MyMDTextField:
-                    id: frequency
-                    hint_text: "Frequência"
-                    helper_text: "Unidade: hertz (Hz)"
+                        Widget:
+                            size_hint_y: None
+                            height: dp(45)
 
-            MyMDBoxLayout:
-                size_hint_x: .5
-                pos_hint: {"center_x": .5, "center_y": .5}
+                        MDLabel:
+                            text: "Número de Espiras"
 
-                MyMDTextField:
-                    id: blade_thickness
-                    hint_text: "Espessura Lâmina"
-                    helper_text: "Unidade: milímetros (mm)"
+                        MyMDBoxLayout:
 
-            MyMDBoxLayout:
-                MDFillRoundFlatIconButton:
-                    id: dimensionar_button
+                            MyMDTextField:
+                                id: espiras_primario
+                                hint_text: "Primário"
+                                readonly: True
 
-                    text: "Dimensionar Transformador"
-                    padding: "15dp"
-                    icon: "lightning-bolt-circle"
+                            MyMDTextField:
+                                id: espiras_secundario
+                                hint_text: "Secundária"
+                                readonly: True
 
+                        MDLabel:
+                            text: "Bitola do Cabo"
+
+                        MyMDBoxLayout:
+
+                            MyMDTextField:
+                                id: cabo_AWG_primario
+                                hint_text: "Primário"
+                                readonly: True
+
+                            MyMDTextField:
+                                id: cabo_AWG_secundario
+                                hint_text: "Secundário"
+                                readonly: True
+
+
+                        MDLabel:
+                            text: "Lâmina"
+
+                        MyMDBoxLayout:
+
+                            MyMDTextField:
+                                id: lamina
+                                hint_text: "Tipo de Lâmina"
+                                readonly: True
+
+                            MyMDTextField:
+                                id: quantidade_laminas
+                                hint_text: "Quantidade"
+                                readonly: True
+
+                        MDLabel:
+                            text: "Dimensões do Transformador"
+
+                        MyMDBoxLayout:
+
+                            MyMDTextField:
+                                id: dimensao_a
+                                hint_text: "Dimensão a [cm]"
+                                readonly: True
+
+                            MyMDTextField:
+                                id: dimensao_b
+                                hint_text: "Dimensão b [cm]"
+                                readonly: True
+
+                        MyMDBoxLayout:
+                            size_hint_x: .5
+                            pos_hint: {"center_x": .5, "center_y": .5}
+
+                            MyMDTextField:
+                                id: peso_total
+                                hint_text: "Peso [Kg]"
+                                readonly: True
 
     MDNavigationLayout:
         MDScreenManager:
@@ -126,4 +168,3 @@
                     on_press:
                         nav_drawer.set_state("close")
                         app.root.current = "desenvolvedores"
-
