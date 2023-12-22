@@ -8,7 +8,6 @@ from kivymd.app import MDApp
 from kivymd.toast import toast
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.filemanager import MDFileManager
-from kivymd.uix.label import MDLabel
 from matplotlib import pyplot as plt
 from kivy.core.window import Window
 
@@ -129,13 +128,11 @@ class MainApp(MDApp):
         except Exception as e:
             mensagem_erro = ""
             if type(e).__name__ == "ValueError":
-                mensagem_erro = "\nVerifique se todos os campos da Tela Inicial estão preenchidos."
+                mensagem_erro = "Verifique se todos os campos da Tela Inicial estão preenchidos."
             elif type(e).__name__ == "TypeError":
-                mensagem_erro = "\nCertifique-se de que o arquivo importado segue a estrutura recomendada."
+                mensagem_erro = "Certifique-se de que o arquivo importado segue a estrutura recomendada."
 
-            content = MDLabel(text=mensagem_erro, halign='left', valign='top', markup=True, padding=(12, 10))
-            pop_up = MDDialog(title="Erro", size_hint=(0.8, 0.4))
-            pop_up.add_widget(content)
+            pop_up = MDDialog(title="Erro", text=mensagem_erro)
             pop_up.open()
 
     def abrir_arquivo_de_exemplo(self):
@@ -146,13 +143,9 @@ class MainApp(MDApp):
             with open(caminho_arquivo_exemplo, 'r') as arquivo:
                 conteudo = arquivo.read()
 
-                content = MDLabel(text=f"Arquivo Exemplo:\n\n{conteudo}", halign='center', valign='top')
-                pop_up = MDDialog(size_hint=(0.8, 0.8))
-                pop_up.add_widget(content)
+                pop_up = MDDialog(title="Arquivo Exemplo", text=conteudo)
                 pop_up.open()
 
-                print(f'Conteúdo do arquivo de exemplo:\n{conteudo}')
-                # Aqui você pode realizar outras ações com o conteúdo do arquivo, se necessário
         except FileNotFoundError:
             print(f'O arquivo de exemplo não foi encontrado em: {caminho_arquivo_exemplo}')
 
@@ -167,6 +160,8 @@ class MainApp(MDApp):
             result = dimensionar_transformador(tensao_primaria, tensao_secundaria, potencia_secundaria, frequencia,
                                                espessura_lamina)
 
+            self.exibir_imagens_transformador()
+
             if not result:
                 self.limpar_dados()
                 toast("Os valores de entrada fornecidos não são adequados para dimensionar o transformador.")
@@ -176,6 +171,17 @@ class MainApp(MDApp):
         else:
             toast("Preencha todos os campos.")
 
+    def exibir_imagens_transformador(self):
+        box_images = self.dimensionamento.ids.box_transformer_images
+
+        box_images.size_hint_y = None
+        box_images.height = "200dp"
+        box_images.spacing = "20dp"
+
+        lamina = TransformadorInformacoes['lamina'].lower()
+        self.dimensionamento.ids.imagem_transformador.source = "../integracao/images/transformador.png"
+        self.dimensionamento.ids.imagem_lamina.source = f"../integracao/images/lamina_{lamina}.png"
+
     def verificar_campos(self):
         # Verificar se todos os campos estão preenchidos
         todos_preenchidos = []
@@ -184,9 +190,6 @@ class MainApp(MDApp):
         for text_input in self.tela_inicial_text_fields:
             todos_preenchidos.append(text_input.text)
             erros.append(text_input.error)
-
-        # print("Preenchidos:", all(todos_preenchidos))
-        # print("Corretos:", any(erros))
 
         # Ativar ou desativar o botão com base na condição
         return all(todos_preenchidos) and not any(erros)

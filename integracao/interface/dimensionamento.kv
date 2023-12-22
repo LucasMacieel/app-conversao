@@ -71,36 +71,25 @@
                             text: "Dimensões do Transformador"
 
                         MDBoxLayout:
-                            orientation: 'horizontal'
+                            id: box_transformer_images
 
-                            MDBoxLayout:
-#                                size: {"40dp", "50dp"}
-                                orientation: 'horizontal'
-                                spacing: "20dp"
+                            Image:
+                                id: imagem_transformador
 
-                                FitImage:
-                                    size_hint_y: None
-                                    size: {"50dp", "122dp"}
-                                    orientation: 'horizontal'
-                                    source: '../integracao/images/transformador.png'
+                            Image:
+                                id: imagem_lamina
 
-                                FitImage:
-                                    size_hint_y: None
-                                    size: {"85dp", "120dp"}
-                                    orientation: 'horizontal'
-                                    source: '../integracao/images/lamina_padronizada.png'
+                        MyMDBoxLayout:
 
-                            MyMDBoxLayout:
-                                size_hint_y: .9
-                                MyMDTextField:
-                                    id: dimensao_a
-                                    hint_text: "Dimensão a [cm]"
-                                    readonly: True
+                            MyMDTextField:
+                                id: dimensao_a
+                                hint_text: "Dimensão a [cm]"
+                                readonly: True
 
-                                MyMDTextField:
-                                    id: dimensao_b
-                                    hint_text: "Dimensão b [cm]"
-                                    readonly: True
+                            MyMDTextField:
+                                id: dimensao_b
+                                hint_text: "Dimensão b [cm]"
+                                readonly: True
 
                         MyMDBoxLayout:
                             size_hint_x: .5
