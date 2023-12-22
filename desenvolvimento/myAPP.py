@@ -1,9 +1,18 @@
+import os
+import matplotlib
+
+matplotlib.use("module://kivy_garden.matplotlib.backend_kivy")
+from kivy.garden.matplotlib.backend_kivyagg import NavigationToolbar2Kivy, FigureCanvasKivyAgg
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.toast import toast
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.filemanager import MDFileManager
+from kivymd.uix.label import MDLabel
+from matplotlib import pyplot as plt
 
 from integracao.definicoes.definicoes import TransformadorInformacoes
-from integracao.modulos.functions import dimensionar_transformador
+from integracao.modulos.functions import dimensionar_transformador, plot_corrente_mag
 
 
 def set_error_message(instance_textfield):
@@ -39,16 +48,68 @@ class MainApp(MDApp):
         self.tela_inicial = None
         self.dimensionamento = None
         self.ficha_tecnica = None
-        self.dimensionar_butao = None
+        self.corrente_magnetizacao = None
         self.tela_inicial_text_fields = None
         self.dimensionamento_text_fields = None
         self.ficha_tecnica_text_fields = None
+        self.bx = None
+        self.nav = None
         self.ficha_tecnica_info = ["peso_ferro", "peso_cobre", "peso_total", "perdas_ferro", "perdas_cobre",
                                    "rendimento"]
         self.dimensionamento_info = ["espiras_primario", "espiras_secundario", "cabo_AWG_primario",
                                      "cabo_AWG_secundario", "lamina", "quantidade_laminas", "peso_total",
                                      "dimensao_a", "dimensao_b"]
         self.screen = Builder.load_file("../integracao/interface/main.kv")
+        self.manager_open = False
+        self.file_manager = MDFileManager(
+            exit_manager=self.exit_manager, select_path=self.plotar_grafico_mag
+        )
+
+    def file_manager_open(self):
+        self.file_manager.show(os.path.expanduser("~"))  # output manager to the screen
+        self.manager_open = True
+
+    def exit_manager(self, *args):
+        """Called when the user reaches the root of the directory tree."""
+
+        self.manager_open = False
+        self.file_manager.close()
+
+    def clear_graph_widgets(self):
+        self.nav = None
+
+    def plotar_grafico_mag(self, path: str):
+        """Plotar o gráfico da corrente de magnetização."""
+
+        self.exit_manager()
+        self.clear_graph_widgets()
+        toast(path)
+
+        try:
+            espiras_primaria = TransformadorInformacoes["espiras_primario"]
+            frequencia = float(self.tela_inicial.ids.frequency.text)
+            tensao_primaria = float(self.tela_inicial.ids.primary_voltage.text)
+
+            t, c = plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, path)
+
+            plt.ylabel("Im [A]")
+            plt.xlabel("t [s]")
+            plt.plot(t, c)
+            plt.grid()
+
+            canvas = FigureCanvasKivyAgg(plt.gcf())
+            self.bx = self.corrente_magnetizacao.ids.graph
+            self.nav = NavigationToolbar2Kivy(canvas)
+
+            self.bx.add_widget(self.nav.actionbar)
+            self.bx.add_widget(canvas)
+
+        except Exception as e:
+            mensagem_erro = f"\n{type(e).__name__}, {str(e)}"
+            content = MDLabel(text=mensagem_erro, halign='left', valign='top', markup=True, padding=(12, 10))
+            pop_up = MDDialog(title="Erro", size_hint=(0.8, 0.4))
+            pop_up.add_widget(content)
+            pop_up.open()
 
     def executar_calculos(self):
         if self.verificar_campos():
@@ -98,7 +159,6 @@ class MainApp(MDApp):
         self.tela_inicial = self.screen.get_screen("telaInicial")
         self.dimensionamento = self.screen.get_screen("dimensionamento")
         self.ficha_tecnica = self.screen.get_screen("fichaTecnica")
-        self.dimensionar_butao = self.tela_inicial.ids.dimensionar_button
 
         self.tela_inicial_text_fields = [
             self.tela_inicial.ids.primary_voltage,
@@ -133,10 +193,6 @@ class MainApp(MDApp):
             textfield.bind(
                 on_text_validate=set_error_message
             )
-
-        self.dimensionar_butao.bind(
-            on_press=self.executar_calculos
-        )
 
         return self.screen
 

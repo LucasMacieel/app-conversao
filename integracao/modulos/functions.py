@@ -1,5 +1,9 @@
 import math
 
+import numpy as np
+import pandas as pd
+from scipy.interpolate import interp1d
+
 from integracao.definicoes.definicoes import Transformador, Lamina, LaminaInformacoes, TransformadorInformacoes
 from integracao.modulos.suporte import encontrar_produto_mais_proximo, encontrar_densidade_corrente, \
     encontrar_valor_awg, calcular_secao_cobre, calcular_densidade_corrente_media, calcular_espiras, verificar_valores
@@ -140,7 +144,7 @@ def calcular_secao_magnetica(transformador, lamina, potencia, frequencia):
 
 
 def calcular_quantidade_laminas(dimensao_b, espessura_lamina=0.5):
-    return (dimensao_b * 0.9)/espessura_lamina
+    return (dimensao_b * 0.9) / espessura_lamina
 
 
 def numero_espiras(frequencia, tensao_primaria, tensao_secundaria, secao_magnetica, inducao_magnetica_max=11300):
@@ -187,25 +191,25 @@ def calcular_peso_ferro(tipo_lamina, dimensao_a, dimensao_b):
 
 
 def calcular_peso_cobre(dimensao_a, dimensao_b, secao_cobre):
-    comprimento_espira = 2*dimensao_b + dimensao_a*(2+0.5*math.pi)
+    comprimento_espira = 2 * dimensao_b + dimensao_a * (2 + 0.5 * math.pi)
 
-    return ((secao_cobre/100) * comprimento_espira * 9) / 1000
+    return ((secao_cobre / 100) * comprimento_espira * 9) / 1000
 
 
 def calcular_perdas_ferro(frequencia, peso_ferro, inducao_magnetica_max=11300):
-    perda_lamina = 1.35*frequencia*math.pow(inducao_magnetica_max/10000, 2)/50
+    perda_lamina = 1.35 * frequencia * math.pow(inducao_magnetica_max / 10000, 2) / 50
 
-    return 1.15*perda_lamina*peso_ferro
+    return 1.15 * perda_lamina * peso_ferro
 
 
 def calcular_perdas_cobre(densidade_corrente_media, peso_cobre):
-    perda_especifica = 2.43*math.pow(densidade_corrente_media, 2)
+    perda_especifica = 2.43 * math.pow(densidade_corrente_media, 2)
 
-    return perda_especifica*peso_cobre
+    return perda_especifica * peso_cobre
 
 
 def calcular_rendimento(potencia_secundaria, perdas_nucleo, perdas_cobre):
-    return (100 * potencia_secundaria)/(potencia_secundaria + perdas_cobre + perdas_nucleo)
+    return (100 * potencia_secundaria) / (potencia_secundaria + perdas_cobre + perdas_nucleo)
 
 
 def possibilidade_execucao(tipo_lamina, dimensao_a, espiras_primario, espiras_secundario, secao_condutor_primario,
@@ -215,4 +219,29 @@ def possibilidade_execucao(tipo_lamina, dimensao_a, espiras_primario, espiras_se
     sesao_cobre = calcular_secao_cobre(espiras_primario, espiras_secundario, secao_condutor_primario,
                                        secao_condutor_secundario)
 
-    return secao_janela/sesao_cobre >= 3
+    return secao_janela / sesao_cobre >= 3
+
+
+def plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, arquivo):
+    try:
+        # Tensão máxima [V]:
+        V = tensao_primaria * (2 ** 0.5)
+        # Velocidade angular [rad/s]:
+        w = 2 * np.pi * frequencia
+
+        coordinates = pd.read_excel(arquivo)
+        fmm = coordinates['MMF']
+        fluxo = coordinates['Fluxo']
+
+        t = np.arange(0, 0.034, 1 / 3000)
+        fluxo_por_tempo = -V * np.cos(w * t) / (w * espiras_primaria)
+
+        interp_function = interp1d(fluxo, fmm, kind='linear', fill_value="extrapolate")
+        mmf = interp_function(fluxo_por_tempo)
+
+        corrente = mmf / espiras_primaria
+
+        return t, corrente
+
+    except Exception as e:
+        print(f"Error: {e}")
