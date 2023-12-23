@@ -59,7 +59,7 @@ class MainApp(MDApp):
         self.dimensionamento_info = ["espiras_primario", "espiras_secundario", "cabo_AWG_primario",
                                      "cabo_AWG_secundario", "lamina", "quantidade_laminas", "peso_total",
                                      "dimensao_a", "dimensao_b"]
-        self.screen = Builder.load_file("../integracao/interface/main.kv")
+        self.screen = Builder.load_file("integracao/interface/main.kv")
         Window.bind(on_keyboard=self.events)
         self.manager_open = False
         self.file_manager = MDFileManager(
