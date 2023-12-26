@@ -1,7 +1,7 @@
 import math
 
 import numpy as np
-import pandas as pd
+from openpyxl import load_workbook
 from scipy.interpolate import interp1d
 
 from integracao.definicoes.definicoes import Transformador, Lamina, LaminaInformacoes, TransformadorInformacoes
@@ -229,9 +229,24 @@ def plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, arquivo):
         # Velocidade angular [rad/s]:
         w = 2 * np.pi * frequencia
 
-        coordinates = pd.read_excel(arquivo)
-        fmm = coordinates['MMF']
-        fluxo = coordinates['Fluxo']
+        # Listas para armazenar os dados
+        fmm = []
+        fluxo = []
+
+        # Carregar o arquivo Excel
+        workbook = load_workbook(arquivo)
+
+        # Selecionar a planilha desejada
+        sheet = workbook.active  # Ou use workbook['nomedaplanilha'] se souber o nome da planilha
+
+        # Iterar sobre as linhas do arquivo
+        for linha in sheet.iter_rows(min_row=2, values_only=True):
+            # Adicionar valores às listas, convertendo para int
+            fmm.append(linha[0])  # Assumindo que 'MMF' está na primeira coluna
+            fluxo.append(linha[1])  # Assumindo que 'Fluxo' está na segunda coluna
+
+        # Fechar o arquivo Excel
+        workbook.close()
 
         t = np.arange(0, 0.034, 1 / 3000)
         fluxo_por_tempo = -V * np.cos(w * t) / (w * espiras_primaria)

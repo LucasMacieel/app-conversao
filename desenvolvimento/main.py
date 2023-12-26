@@ -2,10 +2,10 @@
 # pip install kivy
 # Intalar o kivMD na página: https://kivymd.readthedocs.io/en/1.1.1/getting-started/
 
-from integracao.modulos.functions import calcular_secao_magnetica, encontrar_produto_mais_proximo, \
-    calcular_perdas_ferro, calcular_peso_ferro, dimensionar_transformador
-from integracao.definicoes.definicoes import Transformador, Lamina, AWG, TransformadorInformacoes
-from integracao.modulos.suporte import definir_dimensoes, arredondar_para_meio
+# from integracao.modulos.functions import calcular_secao_magnetica, encontrar_produto_mais_proximo, \
+#     calcular_perdas_ferro, calcular_peso_ferro, dimensionar_transformador
+# from integracao.definicoes.definicoes import Transformador, Lamina, AWG, TransformadorInformacoes
+# from integracao.modulos.suporte import definir_dimensoes, arredondar_para_meio
 
 
 # print(encontrar_produto_mais_proximo(60.75))

@@ -1,8 +1,5 @@
 import os
-import matplotlib
 
-matplotlib.use("module://kivy_garden.matplotlib.backend_kivy")
-from kivy.garden.matplotlib.backend_kivyagg import NavigationToolbar2Kivy, FigureCanvasKivyAgg
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.toast import toast
@@ -52,8 +49,6 @@ class MainApp(MDApp):
         self.tela_inicial_text_fields = None
         self.dimensionamento_text_fields = None
         self.ficha_tecnica_text_fields = None
-        self.bx = None
-        self.nav = None
         self.ficha_tecnica_info = ["peso_ferro", "peso_cobre", "peso_total", "perdas_ferro", "perdas_cobre",
                                    "rendimento"]
         self.dimensionamento_info = ["espiras_primario", "espiras_secundario", "cabo_AWG_primario",
@@ -76,12 +71,6 @@ class MainApp(MDApp):
         self.manager_open = False
         self.file_manager.close()
 
-    def clear_graph_widgets(self):
-        if self.bx and self.nav:
-            self.bx.clear_widgets()
-            self.bx = None
-            self.nav = None
-
     def events(self, instance, keyboard, keycode, text, modifiers):
         """Called when buttons are pressed on the mobile device."""
 
@@ -103,7 +92,6 @@ class MainApp(MDApp):
         """Plotar o gráfico da corrente de magnetização."""
 
         self.exit_manager()
-        self.clear_graph_widgets()
         toast(path)
 
         try:
@@ -113,31 +101,36 @@ class MainApp(MDApp):
 
             t, c = plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, path)
 
-            plt.ylabel("Im [A]")
-            plt.xlabel("t [s]")
-            plt.plot(t, c)
-            plt.grid()
+            fig, ax = plt.subplots()
 
-            canvas = FigureCanvasKivyAgg(plt.gcf())
-            self.bx = self.corrente_magnetizacao.ids.graph
-            self.nav = NavigationToolbar2Kivy(canvas)
+            ax.plot(t, c)
 
-            self.bx.add_widget(self.nav.actionbar)
-            self.bx.add_widget(canvas)
+            # Adiciona rótulos e título
+            ax.set_xlabel('Im [A]')
+            ax.set_ylabel('t [s]')
+            ax.set_title('Corrente de Magnetização')
+
+            # Adiciona grid
+            ax.grid(True)
+
+            screen1 = self.corrente_magnetizacao.ids.graph
+            screen1.figure_wgt.figure = fig
 
         except Exception as e:
             mensagem_erro = ""
             if type(e).__name__ == "ValueError":
                 mensagem_erro = "Verifique se todos os campos da Tela Inicial estão preenchidos."
             elif type(e).__name__ == "TypeError":
-                mensagem_erro = "Certifique-se de que o arquivo importado segue a estrutura recomendada."
+                mensagem_erro = f"Certifique-se de que o arquivo importado segue a estrutura recomendada."
+            else:
+                mensagem_erro = f"Debug: {e}"
 
             pop_up = MDDialog(title="Erro", text=mensagem_erro)
             pop_up.open()
 
     def abrir_arquivo_de_exemplo(self):
         # Substitua o caminho do arquivo de exemplo pelo caminho real do seu arquivo
-        caminho_arquivo_exemplo = '../integracao/arquivo/MagCurve-1.txt'
+        caminho_arquivo_exemplo = 'integracao/arquivo/MagCurve-1.txt'
 
         try:
             with open(caminho_arquivo_exemplo, 'r') as arquivo:
@@ -179,8 +172,8 @@ class MainApp(MDApp):
         box_images.spacing = "20dp"
 
         lamina = TransformadorInformacoes['lamina'].lower()
-        self.dimensionamento.ids.imagem_transformador.source = "../integracao/images/transformador.png"
-        self.dimensionamento.ids.imagem_lamina.source = f"../integracao/images/lamina_{lamina}.png"
+        self.dimensionamento.ids.imagem_transformador.source = "integracao/images/transformador.png"
+        self.dimensionamento.ids.imagem_lamina.source = f"integracao/images/lamina_{lamina}.png"
 
     def verificar_campos(self):
         # Verificar se todos os campos estão preenchidos
