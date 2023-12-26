@@ -1,10 +1,12 @@
 import math
 
+import numpy as np
+
 from integracao.definicoes.definicoes import AWG, PotenciaCorrente, Lamina
 
 
 def encontrar_produto_mais_proximo(secao_geometrica, lamina):
-    a_aproximado = arredondar_para_meio(secao_geometrica**0.5)
+    a_aproximado = arredondar_para_meio(secao_geometrica ** 0.5)
     aproximacoes_quadrado = []
     dimensoes = {(-1, -1): "Inválido"}
 
@@ -71,8 +73,8 @@ def calcular_espiras(tensao, inducao_magnetica_max, secao_magnetica, frequencia)
 
 
 def calcular_secao_cobre(espiras_primario, espiras_secundario, secao_condutor_primario, secao_condutor_secundario):
-    secao_cobre_primario = espiras_primario*secao_condutor_primario
-    secao_cobre_secundario = espiras_secundario*secao_condutor_secundario
+    secao_cobre_primario = espiras_primario * secao_condutor_primario
+    secao_cobre_secundario = espiras_secundario * secao_condutor_secundario
 
     return secao_cobre_primario + secao_cobre_secundario
 
@@ -95,10 +97,10 @@ def encontrar_densidade_corrente(potencia_secundaria):
 
 def calcular_densidade_corrente_media(corrente_primaria, corrente_secundaria, secao_condutor_primario,
                                       secao_condutor_secundario):
-    densidade_corrente_primaria = corrente_primaria/secao_condutor_primario
-    densidade_corrente_secundaria = corrente_secundaria/secao_condutor_secundario
+    densidade_corrente_primaria = corrente_primaria / secao_condutor_primario
+    densidade_corrente_secundaria = corrente_secundaria / secao_condutor_secundario
 
-    return (densidade_corrente_primaria + densidade_corrente_secundaria)/2
+    return (densidade_corrente_primaria + densidade_corrente_secundaria) / 2
 
 
 def verificar_valores(*valores):
@@ -110,3 +112,13 @@ def verificar_valores(*valores):
 
 def arredondar_para_meio(sm):
     return round(sm * 2) / 2
+
+
+def custom_interpolation(x, y, x_new):
+    # Ajusta um polinômio de grau customizado
+    coefficients = np.polyfit(x, y, 5)
+
+    # Avalia o polinômio nos novos pontos
+    y_new = np.polyval(coefficients, x_new)
+
+    return y_new

@@ -108,7 +108,7 @@ class MainApp(MDApp):
             # Adiciona rótulos e título
             ax.set_xlabel('Im [A]')
             ax.set_ylabel('t [s]')
-            ax.set_title('Corrente de Magnetização')
+            ax.set_title('Corrente de Excitação')
 
             # Adiciona grid
             ax.grid(True)

@@ -2,11 +2,11 @@ import math
 
 import numpy as np
 from openpyxl import load_workbook
-from scipy.interpolate import interp1d
 
 from integracao.definicoes.definicoes import Transformador, Lamina, LaminaInformacoes, TransformadorInformacoes
 from integracao.modulos.suporte import encontrar_produto_mais_proximo, encontrar_densidade_corrente, \
-    encontrar_valor_awg, calcular_secao_cobre, calcular_densidade_corrente_media, calcular_espiras, verificar_valores
+    encontrar_valor_awg, calcular_secao_cobre, calcular_densidade_corrente_media, calcular_espiras, verificar_valores,\
+    custom_interpolation
 
 
 def dimensionar_transformador(tensao_primaria, tensao_secundaria, potencia_secundaria, frequencia, espessura_lamina):
@@ -251,8 +251,7 @@ def plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, arquivo):
         t = np.arange(0, 0.034, 1 / 3000)
         fluxo_por_tempo = -V * np.cos(w * t) / (w * espiras_primaria)
 
-        interp_function = interp1d(fluxo, fmm, kind='linear', fill_value="extrapolate")
-        mmf = interp_function(fluxo_por_tempo)
+        mmf = custom_interpolation(fluxo, fmm, fluxo_por_tempo)
 
         corrente = mmf / espiras_primaria
 
