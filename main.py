@@ -70,8 +70,14 @@ class MainApp(MDApp):
         )
 
     def file_manager_open(self):
-        self.file_manager.show(os.path.expanduser("~"))  # output manager to the screen
-        self.manager_open = True
+        if platform == 'android':
+            from android.storage import primary_external_storage_path
+            primary_ext_storage = primary_external_storage_path()
+
+            self.file_manager.show(primary_ext_storage)
+        else:
+            self.file_manager.show(os.path.expanduser("~"))  # output manager to the screen
+            self.manager_open = True
 
     def exit_manager(self, *args):
         """Called when the user reaches the root of the directory tree."""
@@ -125,7 +131,6 @@ class MainApp(MDApp):
             screen1.figure_wgt.figure = fig
 
         except Exception as e:
-            mensagem_erro = ""
             if type(e).__name__ == "ValueError":
                 mensagem_erro = "Verifique se todos os campos da Tela Inicial estão preenchidos."
             elif type(e).__name__ == "TypeError":
@@ -174,13 +179,18 @@ class MainApp(MDApp):
             toast("Preencha todos os campos.")
 
     def exibir_imagens_transformador(self):
+        box_images = self.dimensionamento.ids.box_images
         box_transformador = self.dimensionamento.ids.imagem_transformador
         box_lamina = self.dimensionamento.ids.imagem_lamina
 
         lamina = TransformadorInformacoes['lamina'].lower()
 
+        if platform == 'android':
+            box_images.orientation = 'vertical'
+        else:
+            box_images.orientation = 'horizontal'
+
         if lamina == 'padronizada':
-            pass
             box_transformador.size = "300dp", "250dp"
             box_lamina.size = "300dp", "200dp"
         elif lamina == 'comprida':

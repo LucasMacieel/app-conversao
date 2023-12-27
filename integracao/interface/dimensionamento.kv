@@ -18,7 +18,7 @@
 
                 MDBoxLayout:
                     adaptive_height: True
-                    padding: 20
+                    padding: [0, 50]
                     orientation: "vertical"
                     spacing: "40dp"
 
@@ -74,11 +74,11 @@
                             text: "Dimensões do Transformador"
 
                         MyMDBoxLayout:
-                            orientation: 'horizontal'
+                            id: box_images
+
                             adaptive_height: True
                             adaptive_width: True
                             pos_hint: {"center_x": .5, "center_y": .5}
-
 
                             FitImage:
                                 id: imagem_transformador
