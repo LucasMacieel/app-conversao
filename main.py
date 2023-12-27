@@ -11,6 +11,14 @@ from kivy.core.window import Window
 from integracao.definicoes.definicoes import TransformadorInformacoes
 from integracao.modulos.functions import dimensionar_transformador, plot_corrente_mag
 
+from kivy.utils import platform
+
+if platform == 'android':
+    import android
+    from android.permissions import request_permissions, Permission
+
+    request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
+
 
 def set_error_message(instance_textfield):
     try:
@@ -165,15 +173,21 @@ class MainApp(MDApp):
             toast("Preencha todos os campos.")
 
     def exibir_imagens_transformador(self):
-        box_images = self.dimensionamento.ids.box_transformer_images
-
-        box_images.size_hint_y = None
-        box_images.height = "200dp"
-        box_images.spacing = "20dp"
+        box_transformador = self.dimensionamento.ids.imagem_transformador
+        box_lamina = self.dimensionamento.ids.imagem_lamina
 
         lamina = TransformadorInformacoes['lamina'].lower()
-        self.dimensionamento.ids.imagem_transformador.source = "integracao/images/transformador.png"
-        self.dimensionamento.ids.imagem_lamina.source = f"integracao/images/lamina_{lamina}.png"
+
+        if lamina == 'padronizada':
+            pass
+            box_transformador.size = "300dp", "250dp"
+            box_lamina.size = "300dp", "200dp"
+        elif lamina == 'comprida':
+            box_transformador.size = "300dp", "250dp"
+            box_lamina.size = "250dp", "300dp"
+
+        box_transformador.source = "integracao/images/transformador.png"
+        box_lamina.source = f"integracao/images/lamina_{lamina}.png"
 
     def verificar_campos(self):
         # Verificar se todos os campos estão preenchidos

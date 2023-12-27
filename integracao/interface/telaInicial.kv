@@ -1,131 +1,130 @@
 <TelaInicial@Screen>:
     name: "telaInicial"
 
-    MDScreen:
-        MDBoxLayout:
-            orientation: "vertical"
-            spacing: "90dp"
-            adaptive_height: True
-            size_hint_x: .8
-            pos_hint: {"center_x": .5, "center_y": .5}
+    MDBoxLayout:
+        orientation: "vertical"
 
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: primary_voltage
-                    hint_text: "Tensão Primária"
-                    helper_text: "Unidade: Volt (V)"
+        MDTopAppBar:
+            id: menu_top_app_bar
 
-                MyMDTextField:
-                    id: secondary_voltage
-                    hint_text: "Tensão Secundária"
-                    helper_text: "Unidade: Volt (V)"
+            title: "Tela Inicial"
+            left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: secondary_power
-                    hint_text: "Potência"
-                    helper_text: "Unidade: volt-ampère (VA)"
-
-                MyMDTextField:
-                    id: frequency
-                    hint_text: "Frequência"
-                    helper_text: "Unidade: hertz (Hz)"
-
-            MyMDBoxLayout:
-                size_hint_x: .5
+        MDScreen:
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: "90dp"
+                adaptive_height: True
+                size_hint_x: .95
+                padding: 20
                 pos_hint: {"center_x": .5, "center_y": .5}
 
-                MyMDTextField:
-                    id: blade_thickness
-                    hint_text: "Espessura Lâmina"
-                    helper_text: "Unidade: milímetros (mm)"
+                MyMDBoxLayout:
+                    MyMDTextField:
+                        id: primary_voltage
+                        hint_text: "Tensão Primária"
+                        helper_text: "Unidade: Volt (V)"
 
-            MyMDBoxLayout:
-                MDFillRoundFlatIconButton:
-                    id: dimensionar_button
+                    MyMDTextField:
+                        id: secondary_voltage
+                        hint_text: "Tensão Secundária"
+                        helper_text: "Unidade: Volt (V)"
 
-                    text: "Dimensionar Transformador"
-                    padding: "15dp"
-                    icon: "lightning-bolt-circle"
-                    on_release:
-                        app.executar_calculos()
-                        app.root.current = "dimensionamento"
+                MyMDBoxLayout:
+                    MyMDTextField:
+                        id: secondary_power
+                        hint_text: "Potência"
+                        helper_text: "Unidade: volt-ampère (VA)"
 
+                    MyMDTextField:
+                        id: frequency
+                        hint_text: "Frequência"
+                        helper_text: "Unidade: hertz (Hz)"
 
-    MDNavigationLayout:
-        MDScreenManager:
-            MDScreen:
-                MDTopAppBar:
-                    id: menu_top_app_bar
+                MyMDBoxLayout:
+                    size_hint_x: .5
+                    pos_hint: {"center_x": .5, "center_y": .5}
 
-                    title: "Tela Inicial"
-                    pos_hint: {"top": 1}
-                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                    MyMDTextField:
+                        id: blade_thickness
+                        hint_text: "Espessura Lâmina"
+                        helper_text: "Unidade: milímetros (mm)"
 
-        MDNavigationDrawer:
-            id: nav_drawer
-            radius: (0, 16, 16, 0)
+                MyMDBoxLayout:
+                    MDFillRoundFlatIconButton:
+                        id: dimensionar_button
 
-            MDNavigationDrawerMenu:
+                        text: "Dimensionar Transformador"
+                        padding: "15dp"
+                        icon: "lightning-bolt-circle"
+                        on_release:
+                            app.executar_calculos()
+                            app.root.current = "dimensionamento"
 
-                MDNavigationDrawerHeader:
-                    title: "Transformadores"
-                    title_color: "#4a4939"
-                    text: "Projeto UPE-POLI 2023.2"
-                    spacing: "4dp"
-                    padding: "12dp", 0, 0, "56dp"
+    MDNavigationDrawer:
+        id: nav_drawer
+        radius: (0, 16, 16, 0)
 
-                MDNavigationDrawerLabel:
-                    text: "Dados Entrada"
+        MDNavigationDrawerMenu:
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "home"
-                    text: "Tela Inicial"
+            MDNavigationDrawerHeader:
+                title: "Transformadores"
+                title_color: "#4a4939"
+                text: "Projeto UPE-POLI 2023.2"
+                spacing: "4dp"
+                padding: "12dp", 0, 0, "56dp"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "telaInicial"
+            MDNavigationDrawerLabel:
+                text: "Dados Entrada"
 
-                MDNavigationDrawerDivider:
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "home"
+                text: "Tela Inicial"
 
-                MDNavigationDrawerLabel:
-                    text: "Desenvolvimento"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "telaInicial"
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "note-edit"
-                    text: "Dimensionamento"
+            MDNavigationDrawerDivider:
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "dimensionamento"
+            MDNavigationDrawerLabel:
+                text: "Desenvolvimento"
 
-                DrawerClickableItem:
-                    icon: "sine-wave"
-                    text: "Corrente Magnetização"
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "note-edit"
+                text: "Dimensionamento"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "correnteMagnetizacao"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "dimensionamento"
 
-                MDNavigationDrawerDivider:
+            DrawerClickableItem:
+                icon: "sine-wave"
+                text: "Corrente Magnetização"
 
-                MDNavigationDrawerLabel:
-                    text: "Detalhamento"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "correnteMagnetizacao"
 
-                DrawerClickableItem:
-                    icon: "file-document"
-                    text: "Ficha Técnica"
+            MDNavigationDrawerDivider:
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "fichaTecnica"
+            MDNavigationDrawerLabel:
+                text: "Detalhamento"
 
-                DrawerClickableItem:
-                    icon: "account-group"
-                    text: "Desenvolvedores"
+            DrawerClickableItem:
+                icon: "file-document"
+                text: "Ficha Técnica"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "desenvolvedores"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "fichaTecnica"
+
+            DrawerClickableItem:
+                icon: "account-group"
+                text: "Desenvolvedores"
+
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "desenvolvedores"

@@ -1,31 +1,32 @@
 <Dimensionamento@Screen>:
     name: "dimensionamento"
 
-    MDScreen:
-        MDBoxLayout:
-            orientation: "vertical"
+    MDBoxLayout:
+        orientation: 'vertical'
 
-            MyMDBoxLayout:
+        MDTopAppBar:
+            id: menu_top_app_bar
 
-                MDScrollView:
+            title: "Dimensionamento"
+            left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 
-                    MDBoxLayout:
-                        orientation: "vertical"
-                        spacing: "90dp"
-                        padding: "10dp"
-                        adaptive_height: True
-                        size_hint_x: .8
-                        pos_hint: {"center_x": .5, "center_y": .5}
+        MDScreen:
+            MDScrollView:
+                do_scroll_x: False
+                pos_hint: {"center_x": .5, "center_y": .5}
+                size_hint_x: .95
 
-                        Widget:
-                            size_hint_y: None
-                            height: dp(45)
+                MDBoxLayout:
+                    adaptive_height: True
+                    padding: 20
+                    orientation: "vertical"
+                    spacing: "40dp"
 
+                    VerticalMDBoxLayout:
                         MDLabel:
                             text: "Número de Espiras"
 
                         MyMDBoxLayout:
-
                             MyMDTextField:
                                 id: espiras_primario
                                 hint_text: "Primário"
@@ -36,11 +37,11 @@
                                 hint_text: "Secundária"
                                 readonly: True
 
+                    VerticalMDBoxLayout:
                         MDLabel:
                             text: "Bitola do Cabo"
 
                         MyMDBoxLayout:
-
                             MyMDTextField:
                                 id: cabo_AWG_primario
                                 hint_text: "Primário"
@@ -51,12 +52,11 @@
                                 hint_text: "Secundário"
                                 readonly: True
 
-
+                    VerticalMDBoxLayout:
                         MDLabel:
                             text: "Lâmina"
 
                         MyMDBoxLayout:
-
                             MyMDTextField:
                                 id: lamina
                                 hint_text: "Tipo de Lâmina"
@@ -67,19 +67,35 @@
                                 hint_text: "Quantidade"
                                 readonly: True
 
+                    VerticalMDBoxLayout:
+                        spacing: "20dp"
+
                         MDLabel:
                             text: "Dimensões do Transformador"
 
-                        MDBoxLayout:
-                            id: box_transformer_images
+                        MyMDBoxLayout:
+                            orientation: 'horizontal'
+                            adaptive_height: True
+                            adaptive_width: True
+                            pos_hint: {"center_x": .5, "center_y": .5}
 
-                            Image:
+
+                            FitImage:
                                 id: imagem_transformador
 
-                            Image:
+                                radius: 24
+                                size_hint: None, None
+                                pos_hint: {"center_x": .5, "center_y": .5}
+
+                            FitImage:
                                 id: imagem_lamina
 
+                                radius: 24
+                                size_hint: None, None
+                                pos_hint: {"center_x": .5, "center_y": .5}
+
                         MyMDBoxLayout:
+                            adaptive_height: True
 
                             MyMDTextField:
                                 id: dimensao_a
@@ -92,88 +108,78 @@
                                 readonly: True
 
                         MyMDBoxLayout:
+                            adaptive_height: True
                             size_hint_x: .5
-                            pos_hint: {"center_x": .5, "center_y": .5}
 
                             MyMDTextField:
                                 id: peso_total
                                 hint_text: "Peso [Kg]"
                                 readonly: True
 
-    MDNavigationLayout:
-        MDScreenManager:
-            MDScreen:
-                MDTopAppBar:
-                    id: menu_top_app_bar
+    MDNavigationDrawer:
+        id: nav_drawer
+        radius: (0, 16, 16, 0)
 
-                    title: "Dimensionamento"
-                    pos_hint: {"top": 1}
-                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+        MDNavigationDrawerMenu:
 
-        MDNavigationDrawer:
-            id: nav_drawer
-            radius: (0, 16, 16, 0)
+            MDNavigationDrawerHeader:
+                title: "Transformadores"
+                title_color: "#4a4939"
+                text: "Projeto UPE-POLI 2023.2"
+                spacing: "4dp"
+                padding: "12dp", 0, 0, "56dp"
 
-            MDNavigationDrawerMenu:
+            MDNavigationDrawerLabel:
+                text: "Dados Entrada"
 
-                MDNavigationDrawerHeader:
-                    title: "Transformadores"
-                    title_color: "#4a4939"
-                    text: "Projeto UPE-POLI 2023.2"
-                    spacing: "4dp"
-                    padding: "12dp", 0, 0, "56dp"
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "home"
+                text: "Tela Inicial"
 
-                MDNavigationDrawerLabel:
-                    text: "Dados Entrada"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "telaInicial"
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "home"
-                    text: "Tela Inicial"
+            MDNavigationDrawerDivider:
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "telaInicial"
+            MDNavigationDrawerLabel:
+                text: "Desenvolvimento"
 
-                MDNavigationDrawerDivider:
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "note-edit"
+                text: "Dimensionamento"
 
-                MDNavigationDrawerLabel:
-                    text: "Desenvolvimento"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "dimensionamento"
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "note-edit"
-                    text: "Dimensionamento"
+            DrawerClickableItem:
+                icon: "sine-wave"
+                text: "Corrente Magnetização"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "dimensionamento"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "correnteMagnetizacao"
 
-                DrawerClickableItem:
-                    icon: "sine-wave"
-                    text: "Corrente Magnetização"
+            MDNavigationDrawerDivider:
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "correnteMagnetizacao"
+            MDNavigationDrawerLabel:
+                text: "Detalhamento"
 
-                MDNavigationDrawerDivider:
+            DrawerClickableItem:
+                icon: "file-document"
+                text: "Ficha Técnica"
 
-                MDNavigationDrawerLabel:
-                    text: "Detalhamento"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "fichaTecnica"
 
-                DrawerClickableItem:
-                    icon: "file-document"
-                    text: "Ficha Técnica"
+            DrawerClickableItem:
+                icon: "account-group"
+                text: "Desenvolvedores"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "fichaTecnica"
-
-                DrawerClickableItem:
-                    icon: "account-group"
-                    text: "Desenvolvedores"
-
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "desenvolvedores"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "desenvolvedores"

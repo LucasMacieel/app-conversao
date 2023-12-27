@@ -1,144 +1,150 @@
 <FichaTecnica@Screen>:
     name: "fichaTecnica"
 
-    MDScreen:
-        MDBoxLayout:
-            orientation: "vertical"
-            spacing: "80dp"
-            adaptive_height: True
-            size_hint_x: .8
-            pos_hint: {"center_x": .5, "center_y": .5}
+    MDBoxLayout:
+        orientation: 'vertical'
 
-            MDLabel:
-                text: "Peso Transformador"
+        MDTopAppBar:
+            id: menu_top_app_bar
 
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: peso_ferro
+            title: "Ficha Técnica"
+            left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 
-                    hint_text: "Peso Ferro [Kg]"
-                    readonly: True
-                    focus: False
+        MDScreen:
+            MDScrollView:
+                do_scroll_x: False
+                pos_hint: {"center_x": .5, "center_y": .5}
+                size_hint_x: .95
 
-                MyMDTextField:
-                    id: peso_cobre
+                MDBoxLayout:
+                    adaptive_height: True
+                    padding: 20
+                    orientation: "vertical"
+                    spacing: "80dp"
 
-                    hint_text: "Peso Cobre [Kg]"
-                    readonly: True
-                    focus: False
+                    MDLabel:
+                        text: "Peso Transformador"
 
-                MyMDTextField:
-                    id: peso_total
+                    MyMDBoxLayout:
+                        MyMDTextField:
+                            id: peso_ferro
 
-                    hint_text: "Peso Total [Kg]"
-                    readonly: True
-                    focus: False
+                            hint_text: "Peso Ferro [Kg]"
+                            readonly: True
+                            focus: False
 
-            MDLabel:
-                text: "Perdas Transformador"
+                        MyMDTextField:
+                            id: peso_cobre
 
-            MyMDBoxLayout:
-                MyMDTextField:
-                    id: perda_ferro
+                            hint_text: "Peso Cobre [Kg]"
+                            readonly: True
+                            focus: False
 
-                    hint_text: "Perda Ferro [W]"
-                    readonly: True
-                    focus: False
+                    MyMDBoxLayout:
+                        size_hint_x: .5
 
-                MyMDTextField:
-                    id: perda_cobre
+                        MyMDTextField:
+                            id: peso_total
 
-                    hint_text: "Perda Cobre [W]"
-                    readonly: True
-                    focus: False
+                            hint_text: "Peso Total [Kg]"
+                            readonly: True
+                            focus: False
 
-            MDLabel:
-                text: "Rendimento"
+                    MDLabel:
+                        text: "Perdas Transformador"
 
-            MyMDBoxLayout:
-                size_hint_x: .5
+                    MyMDBoxLayout:
+                        MyMDTextField:
+                            id: perda_ferro
 
-                MyMDTextField:
-                    id: rendimento
+                            hint_text: "Perda Ferro [W]"
+                            readonly: True
+                            focus: False
 
-                    hint_text: "Rendimento [%]"
-                    readonly: True
-                    focus: False
+                        MyMDTextField:
+                            id: perda_cobre
 
-    MDNavigationLayout:
-        MDScreenManager:
-            MDScreen:
-                MDTopAppBar:
-                    id: menu_top_app_bar
+                            hint_text: "Perda Cobre [W]"
+                            readonly: True
+                            focus: False
 
-                    title: "Ficha Técnica"
-                    pos_hint: {"top": 1}
-                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                    MDLabel:
+                        text: "Rendimento"
 
-        MDNavigationDrawer:
-            id: nav_drawer
-            radius: (0, 16, 16, 0)
+                    MyMDBoxLayout:
+                        size_hint_x: .5
 
-            MDNavigationDrawerMenu:
+                        MyMDTextField:
+                            id: rendimento
 
-                MDNavigationDrawerHeader:
-                    title: "Transformadores"
-                    title_color: "#4a4939"
-                    text: "Projeto UPE-POLI 2023.2"
-                    spacing: "4dp"
-                    padding: "12dp", 0, 0, "56dp"
+                            hint_text: "Rendimento [%]"
+                            readonly: True
+                            focus: False
 
-                MDNavigationDrawerLabel:
-                    text: "Dados Entrada"
+    MDNavigationDrawer:
+        id: nav_drawer
+        radius: (0, 16, 16, 0)
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "home"
-                    text: "Tela Inicial"
+        MDNavigationDrawerMenu:
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "telaInicial"
+            MDNavigationDrawerHeader:
+                title: "Transformadores"
+                title_color: "#4a4939"
+                text: "Projeto UPE-POLI 2023.2"
+                spacing: "4dp"
+                padding: "12dp", 0, 0, "56dp"
 
-                MDNavigationDrawerDivider:
+            MDNavigationDrawerLabel:
+                text: "Dados Entrada"
 
-                MDNavigationDrawerLabel:
-                    text: "Desenvolvimento"
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "home"
+                text: "Tela Inicial"
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "note-edit"
-                    text: "Dimensionamento"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "telaInicial"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "dimensionamento"
+            MDNavigationDrawerDivider:
 
-                DrawerClickableItem:
-                    icon: "sine-wave"
-                    text: "Corrente Magnetização"
+            MDNavigationDrawerLabel:
+                text: "Desenvolvimento"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "correnteMagnetizacao"
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "note-edit"
+                text: "Dimensionamento"
 
-                MDNavigationDrawerDivider:
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "dimensionamento"
 
-                MDNavigationDrawerLabel:
-                    text: "Detalhamento"
+            DrawerClickableItem:
+                icon: "sine-wave"
+                text: "Corrente Magnetização"
 
-                DrawerClickableItem:
-                    icon: "file-document"
-                    text: "Ficha Técnica"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "correnteMagnetizacao"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "fichaTecnica"
+            MDNavigationDrawerDivider:
 
-                DrawerClickableItem:
-                    icon: "account-group"
-                    text: "Desenvolvedores"
+            MDNavigationDrawerLabel:
+                text: "Detalhamento"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "desenvolvedores"
+            DrawerClickableItem:
+                icon: "file-document"
+                text: "Ficha Técnica"
+
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "fichaTecnica"
+
+            DrawerClickableItem:
+                icon: "account-group"
+                text: "Desenvolvedores"
+
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "desenvolvedores"

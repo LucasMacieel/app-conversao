@@ -1,138 +1,147 @@
 <CorrenteMagnetizacao@Screen>:
     name: "correnteMagnetizacao"
 
-    ScreenManager:
-        id: screen_manager
 
-        MDScreen:
-            name: "telaCorrenteMagnetizacao"
+    MDBoxLayout:
+        orientation: "vertical"
 
-            MDBoxLayout:
-                orientation: "vertical"
-                spacing: "300dp"
-                adaptive_height: True
-                adaptive_width: True
-                pos_hint: {"center_x": .45, "center_y": .4}
+        MDTopAppBar:
+            id: menu_top_app_bar
 
-                MyMDBoxLayout:
-                    MDRaisedButton:
-                        text: "Visualizar arquivo modelo"
-                        name: "arquivoModelo"
+            title: "Corrente Magnetização"
+            left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 
-                        on_release: app.abrir_arquivo_de_exemplo()
+        ScreenManager:
+            id: screen_manager
+
+            MDScreen:
+                name: "telaCorrenteMagnetizacao"
 
                 MDBoxLayout:
-                    orientation: 'vertical'
-                    spacing: "20dp"
+                    orientation: "vertical"
+                    spacing: "200dp"
+                    adaptive_height: True
+                    adaptive_width: True
+                    size_hint_x: .95
+                    padding: 20
+                    pos_hint: {"center_x": .5, "center_y": .5}
 
-                    MDRoundFlatIconButton:
-                        text: "Importar arquivo"
-                        icon: "folder"
+                    MDBoxLayout:
+                        orientation: "vertical"
 
-                        on_release: app.file_manager_open()
+                        MDRaisedButton:
+                            text: "Visualizar arquivo modelo"
+                            name: "arquivoModelo"
+                            pos_hint: {"center_x": .5, "center_y": .5}
 
-                    MDRaisedButton:
-                        text: "Gerar gráfico"
-                        name: "graph"
+                            on_release: app.abrir_arquivo_de_exemplo()
 
-                        on_release: app.change_screen("graph", 0)
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        spacing: "20dp"
 
-        MDScreen:
-            name: "graph"
+                        MDRoundFlatIconButton:
+                            text: "Importar arquivo"
+                            icon: "folder"
+                            pos_hint: {"center_x": .5, "center_y": .5}
 
-            BoxLayout:
-                id:graph
-                figure_wgt: figure_wgt
+                            on_release: app.file_manager_open()
 
-                orientation: 'vertical'
-                size_hint_y:.8
-                pos_hint: {"center_x": .5, "center_y": .5}
+                        MDRaisedButton:
+                            text: "Gerar gráfico"
+                            name: "graph"
+                            pos_hint: {"center_x": .5, "center_y": .5}
 
-                MatplotFigure:
-                    id: figure_wgt
+                            on_release: app.change_screen("graph", 0)
 
-                    fast_draw:True
-                    interactive_axis:True
-
-            MDRaisedButton:
-                text: "Voltar"
-                pos_hint: {"center_y":.05, "center_x":.5}
-                on_release: app.change_screen("telaCorrenteMagnetizacao", 1)
-
-    MDNavigationLayout:
-        MDScreenManager:
             MDScreen:
-                MDTopAppBar:
-                    id: menu_top_app_bar
+                name: "graph"
 
-                    title: "Corrente Magnetização"
-                    pos_hint: {"top": 1}
-                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                BoxLayout:
+                    id:graph
+                    figure_wgt: figure_wgt
 
-        MDNavigationDrawer:
-            id: nav_drawer
-            radius: (0, 16, 16, 0)
+                    orientation: "vertical"
+                    spacing: "200dp"
+                    adaptive_height: True
+                    padding: ["10dp", "20dp", "10dp", "60dp"]
+                    pos_hint: {"center_x": .5, "center_y": .5}
 
-            MDNavigationDrawerMenu:
+                    MatplotFigure:
+                        id: figure_wgt
 
-                MDNavigationDrawerHeader:
-                    title: "Transformadores"
-                    title_color: "#4a4939"
-                    text: "Projeto UPE-POLI 2023.2"
-                    spacing: "4dp"
-                    padding: "12dp", 0, 0, "56dp"
+                        fast_draw:True
+                        interactive_axis:True
 
-                MDNavigationDrawerLabel:
-                    text: "Dados Entrada"
+                MDRaisedButton:
+                    text: "Voltar"
+                    pos_hint: {"center_y":.05, "center_x":.5}
+                    on_release: app.change_screen("telaCorrenteMagnetizacao", 1)
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "home"
-                    text: "Tela Inicial"
+    MDNavigationDrawer:
+        id: nav_drawer
+        radius: (0, 16, 16, 0)
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "telaInicial"
+        MDNavigationDrawerMenu:
 
-                MDNavigationDrawerDivider:
+            MDNavigationDrawerHeader:
+                title: "Transformadores"
+                title_color: "#4a4939"
+                text: "Projeto UPE-POLI 2023.2"
+                spacing: "4dp"
+                padding: "12dp", 0, 0, "56dp"
 
-                MDNavigationDrawerLabel:
-                    text: "Desenvolvimento"
+            MDNavigationDrawerLabel:
+                text: "Dados Entrada"
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "note-edit"
-                    text: "Dimensionamento"
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "home"
+                text: "Tela Inicial"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "dimensionamento"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "telaInicial"
 
-                DrawerClickableItem:
-                    icon: "sine-wave"
-                    text: "Corrente Magnetização"
+            MDNavigationDrawerDivider:
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "correnteMagnetizacao"
+            MDNavigationDrawerLabel:
+                text: "Desenvolvimento"
 
-                MDNavigationDrawerDivider:
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "note-edit"
+                text: "Dimensionamento"
 
-                MDNavigationDrawerLabel:
-                    text: "Detalhamento"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "dimensionamento"
 
-                DrawerClickableItem:
-                    icon: "file-document"
-                    text: "Ficha Técnica"
+            DrawerClickableItem:
+                icon: "sine-wave"
+                text: "Corrente Magnetização"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "fichaTecnica"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "correnteMagnetizacao"
 
-                DrawerClickableItem:
-                    icon: "account-group"
-                    text: "Desenvolvedores"
+            MDNavigationDrawerDivider:
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "desenvolvedores"
+            MDNavigationDrawerLabel:
+                text: "Detalhamento"
+
+            DrawerClickableItem:
+                icon: "file-document"
+                text: "Ficha Técnica"
+
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "fichaTecnica"
+
+            DrawerClickableItem:
+                icon: "account-group"
+                text: "Desenvolvedores"
+
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "desenvolvedores"

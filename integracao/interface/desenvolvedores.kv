@@ -1,115 +1,115 @@
 <Desenvolvedores@Screen>:
     name: "desenvolvedores"
 
-    MDScreen:
-        MDBoxLayout:
-            orientation: "vertical"
-            spacing: "90dp"
-            adaptive_height: True
-            size_hint_x: .8
-            pos_hint: {"center_x": .5, "center_y": .5}
+    MDBoxLayout:
+        orientation: "vertical"
 
-            MDList:
-                spacing: "25dp"
+        MDTopAppBar:
+            id: menu_top_app_bar
 
-                MDLabel:
-                    text: "José Victor Tavares de Moura"
-                    halign: "center"
+            title: "Desenvolvedores"
+            left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 
-                MDLabel:
-                    text: "Lucas Henrique Santos Neto"
-                    halign: "center"
+        MDScreen:
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: "90dp"
+                adaptive_height: True
+                size_hint_x: .95
+                padding: 20
+                pos_hint: {"center_x": .5, "center_y": .5}
 
-                MDLabel:
-                    text: "Lucas Maciel Sousa"
-                    halign: "center"
+                MDList:
+                    spacing: "25dp"
 
-                MDLabel:
-                    text: "Pedro Santos Calábria "
-                    halign: "center"
+                    MDLabel:
+                        text: "José Victor Tavares de Moura"
+                        halign: "center"
 
-                MDLabel:
-                    text: "Rodrigo Luiz da Silva"
-                    halign: "center"
+                    MDLabel:
+                        text: "Lucas Henrique Santos Neto"
+                        halign: "center"
 
-                MDLabel:
-                    text: "Victor Augusto Monteiro"
-                    halign: "center"
+                    MDLabel:
+                        text: "Lucas Maciel Sousa"
+                        halign: "center"
 
-    MDNavigationLayout:
-        MDScreenManager:
-            MDScreen:
-                MDTopAppBar:
-                    id: menu_top_app_bar
+                    MDLabel:
+                        text: "Pedro Santos Calábria "
+                        halign: "center"
 
-                    title: "Desenvolvedores"
-                    pos_hint: {"top": 1}
-                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                    MDLabel:
+                        text: "Rodrigo Luiz da Silva"
+                        halign: "center"
 
-        MDNavigationDrawer:
-            id: nav_drawer
-            radius: (0, 16, 16, 0)
+                    MDLabel:
+                        text: "Victor Augusto Monteiro"
+                        halign: "center"
 
-            MDNavigationDrawerMenu:
+    MDNavigationDrawer:
+        id: nav_drawer
+        radius: (0, 16, 16, 0)
 
-                MDNavigationDrawerHeader:
-                    title: "Transformadores"
-                    title_color: "#4a4939"
-                    text: "Projeto UPE-POLI 2023.2"
-                    spacing: "4dp"
-                    padding: "12dp", 0, 0, "56dp"
+        MDNavigationDrawerMenu:
 
-                MDNavigationDrawerLabel:
-                    text: "Dados Entrada"
+            MDNavigationDrawerHeader:
+                title: "Transformadores"
+                title_color: "#4a4939"
+                text: "Projeto UPE-POLI 2023.2"
+                spacing: "4dp"
+                padding: "12dp", 0, 0, "56dp"
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "home"
-                    text: "Tela Inicial"
+            MDNavigationDrawerLabel:
+                text: "Dados Entrada"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "telaInicial"
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "home"
+                text: "Tela Inicial"
 
-                MDNavigationDrawerDivider:
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "telaInicial"
 
-                MDNavigationDrawerLabel:
-                    text: "Desenvolvimento"
+            MDNavigationDrawerDivider:
 
-                DrawerClickableItem:
-                    nav_drawer: nav_drawer
-                    icon: "note-edit"
-                    text: "Dimensionamento"
+            MDNavigationDrawerLabel:
+                text: "Desenvolvimento"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "dimensionamento"
+            DrawerClickableItem:
+                nav_drawer: nav_drawer
+                icon: "note-edit"
+                text: "Dimensionamento"
 
-                DrawerClickableItem:
-                    icon: "sine-wave"
-                    text: "Corrente Magnetização"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "dimensionamento"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "correnteMagnetizacao"
+            DrawerClickableItem:
+                icon: "sine-wave"
+                text: "Corrente Magnetização"
 
-                MDNavigationDrawerDivider:
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "correnteMagnetizacao"
 
-                MDNavigationDrawerLabel:
-                    text: "Detalhamento"
+            MDNavigationDrawerDivider:
 
-                DrawerClickableItem:
-                    icon: "file-document"
-                    text: "Ficha Técnica"
+            MDNavigationDrawerLabel:
+                text: "Detalhamento"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "fichaTecnica"
+            DrawerClickableItem:
+                icon: "file-document"
+                text: "Ficha Técnica"
 
-                DrawerClickableItem:
-                    icon: "account-group"
-                    text: "Desenvolvedores"
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "fichaTecnica"
 
-                    on_press:
-                        nav_drawer.set_state("close")
-                        app.root.current = "desenvolvedores"
+            DrawerClickableItem:
+                icon: "account-group"
+                text: "Desenvolvedores"
+
+                on_press:
+                    nav_drawer.set_state("close")
+                    app.root.current = "desenvolvedores"
