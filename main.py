@@ -8,7 +8,7 @@ from kivymd.uix.filemanager import MDFileManager
 from matplotlib import pyplot as plt
 from kivy.core.window import Window
 
-from integracao.definicoes.definicoes import TransformadorInformacoes
+from integracao.definicoes.definicoes import TransformadorInformacoes, ArquivoExemplo
 from integracao.modulos.functions import dimensionar_transformador, plot_corrente_mag
 
 from kivy.utils import platform
@@ -137,18 +137,19 @@ class MainApp(MDApp):
             pop_up.open()
 
     def abrir_arquivo_de_exemplo(self):
-        # Substitua o caminho do arquivo de exemplo pelo caminho real do seu arquivo
-        caminho_arquivo_exemplo = 'integracao/arquivo/MagCurve-1.txt'
+        valores_mmf = ArquivoExemplo["MMF"]
+        valores_fluxo = ArquivoExemplo["Fluxo"]
 
-        try:
-            with open(caminho_arquivo_exemplo, 'r') as arquivo:
-                conteudo = arquivo.read()
+        if len(valores_mmf) != len(valores_fluxo):
+            print('Há um erro na dimensão dos dados do arquivo exemplo!')
+        else:
+            conteudo = "\r\rMMF\r\r\r\r\r\rFluxo\n"
 
-                pop_up = MDDialog(title="Arquivo Exemplo", text=conteudo)
-                pop_up.open()
+            for valor_mmf, valor_fluxo in zip(valores_mmf, valores_fluxo):
+                conteudo += f'{valor_mmf}\r\r\r{valor_fluxo}\n'
 
-        except FileNotFoundError:
-            print(f'O arquivo de exemplo não foi encontrado em: {caminho_arquivo_exemplo}')
+            pop_up = MDDialog(title="Arquivo Exemplo", text=conteudo)
+            pop_up.open()
 
     def executar_calculos(self):
         if self.verificar_campos():
