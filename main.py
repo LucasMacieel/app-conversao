@@ -96,7 +96,7 @@ class MainApp(MDApp):
         )
 
     def file_manager_open(self, screen_manager):
-        if platform == 'android':
+        if not platform == 'android':
             self.change_screen(screen_manager, "dadosMagnetizacao", 0)
         else:
             self.file_manager.show(os.path.expanduser("~"))  # output manager to the screen
