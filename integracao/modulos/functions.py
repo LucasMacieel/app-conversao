@@ -3,7 +3,8 @@ import math
 import numpy as np
 from openpyxl import load_workbook
 
-from integracao.definicoes.definicoes import Transformador, Lamina, LaminaInformacoes, TransformadorInformacoes
+from integracao.definicoes.definicoes import Transformador, Lamina, LaminaInformacoes, TransformadorInformacoes, \
+    dadosMagnetizacao
 from integracao.modulos.suporte import encontrar_produto_mais_proximo, encontrar_densidade_corrente, \
     encontrar_valor_awg, calcular_secao_cobre, calcular_densidade_corrente_media, calcular_espiras, verificar_valores,\
     custom_interpolation
@@ -222,7 +223,7 @@ def possibilidade_execucao(tipo_lamina, dimensao_a, espiras_primario, espiras_se
     return secao_janela / sesao_cobre >= 3
 
 
-def plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, arquivo):
+def plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, arquivo, plataforma):
     try:
         # Tensão máxima [V]:
         V = tensao_primaria * (2 ** 0.5)
@@ -230,30 +231,31 @@ def plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, arquivo):
         w = 2 * np.pi * frequencia
 
         # Listas para armazenar os dados
-        fmm = []
-        fluxo = []
+        mmf = dadosMagnetizacao["MMF"]
+        fluxo = dadosMagnetizacao["Fluxo"]
 
-        # Carregar o arquivo Excel
-        workbook = load_workbook(arquivo)
+        if not plataforma == "android":
+            # Carregar o arquivo Excel
+            workbook = load_workbook(arquivo)
 
-        # Selecionar a planilha desejada
-        sheet = workbook.active  # Ou use workbook['nomedaplanilha'] se souber o nome da planilha
+            # Selecionar a planilha desejada
+            sheet = workbook.active  # Ou use workbook['nomedaplanilha'] se souber o nome da planilha
 
-        # Iterar sobre as linhas do arquivo
-        for linha in sheet.iter_rows(min_row=2, values_only=True):
-            # Adicionar valores às listas, convertendo para int
-            fmm.append(linha[0])  # Assumindo que 'MMF' está na primeira coluna
-            fluxo.append(linha[1])  # Assumindo que 'Fluxo' está na segunda coluna
+            # Iterar sobre as linhas do arquivo
+            for linha in sheet.iter_rows(min_row=2, values_only=True):
+                # Adicionar valores às listas, convertendo para int
+                mmf.append(linha[0])  # Assumindo que 'MMF' está na primeira coluna
+                fluxo.append(linha[1])  # Assumindo que 'Fluxo' está na segunda coluna
 
-        # Fechar o arquivo Excel
-        workbook.close()
+            # Fechar o arquivo Excel
+            workbook.close()
 
         t = np.arange(0, 0.034, 1 / 3000)
         fluxo_por_tempo = -V * np.cos(w * t) / (w * espiras_primaria)
 
-        mmf = custom_interpolation(fluxo, fmm, fluxo_por_tempo)
+        mmf_interpolacao = custom_interpolation(fluxo, mmf, fluxo_por_tempo)
 
-        corrente = mmf / espiras_primaria
+        corrente = mmf_interpolacao / espiras_primaria
 
         return t, corrente
 

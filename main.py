@@ -1,23 +1,28 @@
 import os
 
+from kivy.config import Config
+
+Config.set('kivy', 'keyboard_mode', 'systemanddock')
+
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.toast import toast
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.filemanager import MDFileManager
+from kivymd.uix.textfield import MDTextField
+from kivymd.uix.boxlayout import MDBoxLayout
 from matplotlib import pyplot as plt
 from kivy.core.window import Window
 
-from integracao.definicoes.definicoes import TransformadorInformacoes, ArquivoExemplo
+from integracao.definicoes.definicoes import TransformadorInformacoes, ArquivoExemplo, dadosMagnetizacao
 from integracao.modulos.functions import dimensionar_transformador, plot_corrente_mag
 
 from kivy.utils import platform
 
-if platform == 'android':
-    import android
-    from android.permissions import request_permissions, Permission
 
-    request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
+class MyMDTextField(MDTextField):
+    mode = "rectangle"
+    helper_text_mode = "on_focus"
 
 
 def set_error_message(instance_textfield):
@@ -47,6 +52,27 @@ def exibir_informacoes(infos, fields):
         textfield.text = str(TransformadorInformacoes[info])
 
 
+def criar_conjunto_dados(numero_id):
+    box_dados = MDBoxLayout(
+        spacing="20dp"
+    )
+
+    label_mmf = MyMDTextField(
+        hint_text=f"MMF {numero_id}",
+        helper_text="Unidade: Ampère-espira (Ae)"
+    )
+
+    label_fluxo = MyMDTextField(
+        hint_text=f"Fluxo {numero_id}",
+        helper_text="Unidade: weber (Wb)"
+    )
+
+    box_dados.add_widget(label_mmf)
+    box_dados.add_widget(label_fluxo)
+
+    return box_dados
+
+
 class MainApp(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -69,15 +95,29 @@ class MainApp(MDApp):
             exit_manager=self.exit_manager, select_path=self.plotar_grafico_mag
         )
 
-    def file_manager_open(self):
+    def file_manager_open(self, screen_manager):
         if platform == 'android':
-            from android.storage import primary_external_storage_path
-            primary_ext_storage = primary_external_storage_path()
-
-            self.file_manager.show(primary_ext_storage)
+            self.change_screen(screen_manager, "dadosMagnetizacao", 0)
         else:
             self.file_manager.show(os.path.expanduser("~"))  # output manager to the screen
-            self.manager_open = True
+
+        self.manager_open = True
+
+    def salvar_dados_magnetizacao(self, box_dados_magnetizacao):
+        mmf = []
+        fluxo = []
+
+        for box_elemento in box_dados_magnetizacao.children:
+            for index, elemento in enumerate(box_elemento.children):
+                if index == 0:
+                    fluxo.insert(0, float(elemento.text))
+                else:
+                    mmf.insert(0, float(elemento.text))
+
+        dadosMagnetizacao["MMF"] = mmf
+        dadosMagnetizacao["Fluxo"] = fluxo
+
+        self.plotar_grafico_mag("")
 
     def exit_manager(self, *args):
         """Called when the user reaches the root of the directory tree."""
@@ -93,8 +133,7 @@ class MainApp(MDApp):
                 self.file_manager.back()
         return True
 
-    def change_screen(self, screen_name, back_effect):
-        screen_manager = self.corrente_magnetizacao.ids.screen_manager
+    def change_screen(self, screen_manager, screen_name, back_effect):
         screen_manager.current = screen_name
 
         if back_effect:
@@ -105,15 +144,16 @@ class MainApp(MDApp):
     def plotar_grafico_mag(self, path: str):
         """Plotar o gráfico da corrente de magnetização."""
 
-        self.exit_manager()
-        toast(path)
+        if not platform == "android":
+            self.exit_manager()
+            toast(path)
 
         try:
             espiras_primaria = TransformadorInformacoes["espiras_primario"]
             frequencia = float(self.tela_inicial.ids.frequency.text)
             tensao_primaria = float(self.tela_inicial.ids.primary_voltage.text)
 
-            t, c = plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, path)
+            t, c = plot_corrente_mag(frequencia, espiras_primaria, tensao_primaria, path, platform)
 
             fig, ax = plt.subplots()
 
@@ -218,6 +258,12 @@ class MainApp(MDApp):
 
         for textfield in self.ficha_tecnica_text_fields:
             textfield.text = "-"
+
+    def adicionar_dados(self, box_tabela_dados):
+        qtd_widgets = len(box_tabela_dados.children)
+        widget = criar_conjunto_dados(qtd_widgets)
+
+        box_tabela_dados.add_widget(widget)
 
     def build(self):
         self.theme_cls.theme_style = "Dark"
